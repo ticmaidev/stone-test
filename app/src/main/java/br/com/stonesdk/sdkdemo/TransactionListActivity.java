@@ -1,23 +1,19 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBarActivity;
-
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
@@ -25,8 +21,6 @@ import stone.providers.CancellationProvider;
 import stone.providers.PrintProvider;
 import stone.utils.GlobalInformations;
 import stone.utils.PrintObject;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class TransactionListActivity extends AppCompatActivity implements OnItemClickListener {
 

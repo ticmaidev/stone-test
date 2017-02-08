@@ -1,7 +1,7 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +15,10 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import stone.application.StoneStart;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneCallbackInterface;
-import stone.application.xml.enums.InstalmentTypeEnum;
-import stone.database.transaction.TransactionObject;
 import stone.providers.LoadTablesProvider;
 import stone.providers.TransactionProvider;
 import stone.utils.GlobalInformations;

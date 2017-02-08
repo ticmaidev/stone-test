@@ -1,6 +1,5 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.DownloadTablesProvider;
 import stone.utils.GlobalInformations;
 import stone.utils.Stone;
-
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 

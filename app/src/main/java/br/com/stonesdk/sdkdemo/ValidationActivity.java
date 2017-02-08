@@ -1,24 +1,19 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import stone.application.StoneStart;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.ActiveApplicationProvider;
-import stone.user.Partner;
 import stone.user.UserModel;
-import stone.utils.GlobalInformations;
 import stone.utils.Stone;
 
 public class ValidationActivity extends ActionBarActivity {
@@ -42,7 +37,7 @@ public class ValidationActivity extends ActionBarActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("SEU STONE CODE AQUI");
+            stoneCodeList.add("167988962");
 
             ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");

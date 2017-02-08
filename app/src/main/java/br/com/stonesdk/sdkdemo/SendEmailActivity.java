@@ -1,10 +1,10 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import stone.application.interfaces.StoneCallbackInterface;
-import stone.database.transaction.TransactionObject;
 import stone.providers.SendEmailProvider;
 import stone.utils.EmailClient;
 
