@@ -37,7 +37,7 @@ public class ValidationActivity extends ActionBarActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("167988962");
+            stoneCodeList.add(""); // coloque seu Stone Code aqui
 
             ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");
