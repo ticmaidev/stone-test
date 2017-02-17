@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.SendEmailProvider;
 import stone.utils.EmailClient;

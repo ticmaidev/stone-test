@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.DownloadTablesProvider;

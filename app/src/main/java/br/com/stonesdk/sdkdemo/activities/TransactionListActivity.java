@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
 import java.util.ArrayList;
 import java.util.List;
 import stone.application.interfaces.StoneCallbackInterface;

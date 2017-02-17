@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
 import java.util.ArrayList;
 import java.util.List;
 import stone.application.StoneStart;
@@ -37,7 +38,7 @@ public class ValidationActivity extends ActionBarActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add(""); // coloque seu Stone Code aqui
+            stoneCodeList.add("167988962"); // coloque seu Stone Code aqui
 
             ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");
@@ -46,9 +47,9 @@ public class ValidationActivity extends ActionBarActivity {
             activeApplicationProvider.setWorkInBackground(false); // informa se este provider ira rodar em background ou nao
             activeApplicationProvider.setConnectionCallback(new StoneCallbackInterface() {
 
-				/* Sempre que utilizar um provider, intancie esta Interface.
-				 * Ela ira lhe informar se o provider foi executado com sucesso ou nao
-				 */
+				        /* Sempre que utilizar um provider, intancie esta Interface.
+				         * Ela ira lhe informar se o provider foi executado com sucesso ou nao
+				         */
 
                 /* Metodo chamado se for executado sem erros */
                 public void onSuccess() {
