@@ -1,6 +1,5 @@
 package br.com.stonesdk.sdkdemo;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.DownloadTablesProvider;
 import stone.utils.GlobalInformations;
-import stone.utils.Stone;
-
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listMainActivity);
 
-        String[] options = new String[] {
+        String[] options = new String[]{
                 "Dispositivos pareados",
                 "Fazer uma transação",
                 "Listar transações",
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         // Verifica se o bluetooth esta ligado e se existe algum pinpad conectado.
-                        if(Stone.getPinpadListSize() != null && Stone.getPinpadListSize() > 0) {
+                        if (GlobalInformations.getPinpadListSize() != null && GlobalInformations.getPinpadListSize() > 0) {
                             Intent transactionIntent = new Intent(MainActivity.this, TransactionActivity.class);
                             MainActivity.this.startActivity(transactionIntent);
                             break;
@@ -80,10 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     protected void onResume() {
@@ -96,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         // IMPORTANTE: Mantenha esse provider na sua MAIN, pois ele ira baixar as
         // tabelas AIDs e CAPKs dos servidores da Stone e sera utilizada quando necessário.
         ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
-        if (applicationCache.checkIfHasTables() == false) {
+        if (!applicationCache.checkIfHasTables()) {
 
             // Realiza processo de download das tabelas em sua totalidade.
             DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(MainActivity.this, GlobalInformations.getUserModel(0));
@@ -106,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess() {
                     Toast.makeText(getApplicationContext(), "Tabelas baixadas com sucesso", Toast.LENGTH_SHORT).show();
                 }
+
                 public void onError() {
                     Toast.makeText(getApplicationContext(), "Erro no download das tabelas", Toast.LENGTH_SHORT).show();
                 }

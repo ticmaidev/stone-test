@@ -63,16 +63,13 @@ public class DevicesActivity extends ActionBarActivity implements OnItemClickLis
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public void turnBluetoothOn() {
         try {
             mBluetoothAdapter.enable();
-            do {} while (mBluetoothAdapter.isEnabled() == false);
+            do {} while (!mBluetoothAdapter.isEnabled());
         } catch (Exception e) {
             e.printStackTrace();
         }

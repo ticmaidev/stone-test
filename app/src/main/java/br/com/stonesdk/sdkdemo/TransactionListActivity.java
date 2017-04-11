@@ -59,10 +59,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
