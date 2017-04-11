@@ -1,7 +1,7 @@
 package br.com.stonesdk.sdkdemo.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +26,7 @@ import stone.providers.TransactionProvider;
 import stone.utils.GlobalInformations;
 import stone.utils.StoneTransaction;
 
-public class TransactionActivity extends ActionBarActivity {
+public class TransactionActivity extends AppCompatActivity {
 
     TextView valueTextView;
     TextView numberInstallmentsTextView;

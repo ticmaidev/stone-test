@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +19,7 @@ import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.SendEmailProvider;
 import stone.utils.EmailClient;
 
-public class SendEmailActivity extends ActionBarActivity {
+public class SendEmailActivity extends AppCompatActivity {
 
     TextView userText;
     TextView sendText;

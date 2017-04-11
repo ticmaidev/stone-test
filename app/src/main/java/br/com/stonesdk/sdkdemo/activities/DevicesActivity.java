@@ -3,7 +3,7 @@ package br.com.stonesdk.sdkdemo.activities;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +20,7 @@ import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.BluetoothConnectionProvider;
 import stone.utils.PinpadObject;
 
-public class DevicesActivity extends ActionBarActivity implements OnItemClickListener {
+public class DevicesActivity extends AppCompatActivity implements OnItemClickListener {
 
     static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     static boolean btConnected = false;
