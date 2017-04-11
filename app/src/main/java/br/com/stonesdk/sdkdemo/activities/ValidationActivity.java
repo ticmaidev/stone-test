@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class ValidationActivity extends AppCompatActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("SEU STONE CODE AQUI");
+            stoneCodeList.add("846873720");
 
             final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");
@@ -122,8 +121,8 @@ public class ValidationActivity extends AppCompatActivity {
                 // habilita o modo desenvolvedor
                 Stone.developerMode();
                 Intent mainIntent = new Intent(ValidationActivity.this, MainActivity.class);
-                ValidationActivity.this.startActivity(mainIntent);
-                ValidationActivity.this.finish();
+                startActivity(mainIntent);
+                finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }
@@ -143,14 +142,9 @@ public class ValidationActivity extends AppCompatActivity {
         dialog.setTitle("Android 6.0")
                 .setCancelable(false)
                 .setMessage("Com a versão do android igual ou superior ao Android 6.0," +
-                        " nós vamos precisar que você aceite as permissões para o funcionamento do app.\n\n")
+                        " é necessário que você aceite as permissões para o funcionamento do app.\n\n")
                 .setPositiveButton("OK", listener)
                 .create().show();
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -158,9 +152,8 @@ public class ValidationActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_SETTINGS) {
             ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
-        } else {
-            ValidationActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
         }
+        ValidationActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 }
 

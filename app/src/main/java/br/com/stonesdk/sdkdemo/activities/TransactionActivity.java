@@ -2,8 +2,6 @@ package br.com.stonesdk.sdkdemo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -143,12 +141,4 @@ public class TransactionActivity extends AppCompatActivity {
         instalmentsSpinner.setAdapter(adapter);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
 }

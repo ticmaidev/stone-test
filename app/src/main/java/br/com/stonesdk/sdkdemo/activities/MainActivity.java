@@ -3,8 +3,6 @@ package br.com.stonesdk.sdkdemo.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,6 +15,7 @@ import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.DownloadTablesProvider;
 import stone.utils.GlobalInformations;
+import stone.utils.Stone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (itemPosition) {
                     case 0:
                         Intent devicesIntent = new Intent(MainActivity.this, DevicesActivity.class);
-                        MainActivity.this.startActivity(devicesIntent);
+                        startActivity(devicesIntent);
                         break;
                     case 1:
                         // Verifica se o bluetooth esta ligado e se existe algum pinpad conectado.
-                        if (GlobalInformations.getPinpadListSize() != null && GlobalInformations.getPinpadListSize() > 0) {
+                        if (Stone.getPinpadListSize() != null && Stone.getPinpadListSize() > 0) {
                             Intent transactionIntent = new Intent(MainActivity.this, TransactionActivity.class);
-                            MainActivity.this.startActivity(transactionIntent);
+                            startActivity(transactionIntent);
                             break;
                         } else {
                             Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
@@ -60,26 +59,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     case 2:
                         Intent transactionListIntent = new Intent(MainActivity.this, TransactionListActivity.class);
-                        MainActivity.this.startActivity(transactionListIntent);
+                        startActivity(transactionListIntent);
                         break;
                     case 3:
                         Intent sendEmailIntent = new Intent(MainActivity.this, SendEmailActivity.class);
-                        MainActivity.this.startActivity(sendEmailIntent);
+                        startActivity(sendEmailIntent);
                         break;
                     default:
                         break;
                 }
             }
         });
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     protected void onResume() {

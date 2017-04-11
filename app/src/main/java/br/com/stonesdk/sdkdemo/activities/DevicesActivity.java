@@ -4,8 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -53,15 +51,6 @@ public class DevicesActivity extends AppCompatActivity implements OnItemClickLis
 
         // Exibe todos os dispositivos da lista.
         listView.setAdapter(btArrayAdapter);
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public void turnBluetoothOn() {
