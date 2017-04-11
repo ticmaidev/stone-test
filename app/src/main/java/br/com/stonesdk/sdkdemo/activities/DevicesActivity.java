@@ -12,17 +12,19 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import br.com.stonesdk.sdkdemo.R;
+
 import java.util.Set;
+
+import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.BluetoothConnectionProvider;
 import stone.utils.PinpadObject;
 
-public class DevicesActivity extends ActionBarActivity implements OnItemClickListener{
+public class DevicesActivity extends ActionBarActivity implements OnItemClickListener {
 
-    ListView listView;
     static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     static boolean btConnected = false;
+    ListView listView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,7 @@ public class DevicesActivity extends ActionBarActivity implements OnItemClickLis
         // Lista de Pinpads para passar para o BluetoothConnectionProvider.
         ArrayAdapter<String> btArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
-        BluetoothAdapter bluetoothAdapter  = BluetoothAdapter.getDefaultAdapter();
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
         // Lista todos os dispositivos pareados.
@@ -65,7 +67,8 @@ public class DevicesActivity extends ActionBarActivity implements OnItemClickLis
     public void turnBluetoothOn() {
         try {
             mBluetoothAdapter.enable();
-            do {} while (!mBluetoothAdapter.isEnabled());
+            do {
+            } while (!mBluetoothAdapter.isEnabled());
         } catch (Exception e) {
             e.printStackTrace();
         }

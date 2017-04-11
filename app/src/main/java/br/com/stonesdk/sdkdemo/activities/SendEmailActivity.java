@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.SendEmailProvider;
@@ -47,10 +48,10 @@ public class SendEmailActivity extends ActionBarActivity {
                     String emailTo = sendEmailText.getText().toString().trim();
 
                     EmailClient emailClient = new EmailClient("smtp.empresa.com",    // Servidor smtp.
-                                                              "noreply@empresa.com", // Endereco de email (por exemplo, o seu noreply).
-                                                              "123456",              // Senha do email.
-                                                               emailTo,              // Email do destinatário.
-                                                              "TÍTULO DO E-MAIL");   // Título do email a ser enviado.
+                            "noreply@empresa.com", // Endereco de email (por exemplo, o seu noreply).
+                            "123456",              // Senha do email.
+                            emailTo,              // Email do destinatário.
+                            "TÍTULO DO E-MAIL");   // Título do email a ser enviado.
                     emailClient.setSport("999"); // S Port
                     emailClient.setSmtpPport("999"); // SMTP P Port
                     String receipt = emailTextSample; // Texto digitado pelo usuario.

@@ -15,8 +15,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import br.com.stonesdk.sdkdemo.R;
 
+import br.com.stonesdk.sdkdemo.R;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TypeOfTransactionEnum;

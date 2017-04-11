@@ -12,16 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.DownloadTablesProvider;
 import stone.utils.GlobalInformations;
-
-import stone.utils.Stone;
 
 public class MainActivity extends AppCompatActivity {
 

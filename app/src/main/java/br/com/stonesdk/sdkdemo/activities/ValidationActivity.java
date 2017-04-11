@@ -13,10 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import br.com.stonesdk.sdkdemo.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.stonesdk.sdkdemo.R;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;

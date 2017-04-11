@@ -12,9 +12,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import br.com.stonesdk.sdkdemo.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
@@ -78,6 +80,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                     Toast.makeText(getApplicationContext(), "Impressão realizada com sucesso", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
+
                                 public void onError() {
                                     Toast.makeText(getApplicationContext(), "Um erro ocorreu durante a impressão", Toast.LENGTH_SHORT).show();
                                 }
@@ -86,7 +89,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                         } catch (IndexOutOfBoundsException outException) {
                             Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(),"Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
