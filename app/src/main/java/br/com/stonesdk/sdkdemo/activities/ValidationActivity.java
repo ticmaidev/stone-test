@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import br.com.stonesdk.sdkdemo.R;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class ValidationActivity extends AppCompatActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("846873720");
+            stoneCodeList.add("SEU STONE CODE AQUI");
 
             final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");

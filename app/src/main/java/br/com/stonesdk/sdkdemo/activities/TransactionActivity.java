@@ -1,4 +1,4 @@
-package br.com.stonesdk.sdkdemo;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +15,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
 
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
@@ -102,6 +103,7 @@ public class TransactionActivity extends ActionBarActivity {
 
                 // Processo para envio da transacao.
                 final TransactionProvider provider = new TransactionProvider(TransactionActivity.this, stoneTransaction, GlobalInformations.getPinpadFromListAt(0));
+                provider.setWorkInBackground(false);
                 provider.setDialogMessage("Enviando..");
                 provider.setDialogTitle("Aguarde");
 

@@ -1,15 +1,9 @@
-package br.com.stonesdk.sdkdemo;
-
-import android.support.v7.app.ActionBarActivity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
+package br.com.stonesdk.sdkdemo.activities;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +12,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import br.com.stonesdk.sdkdemo.R;
+import java.util.Set;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.BluetoothConnectionProvider;
 import stone.utils.PinpadObject;
