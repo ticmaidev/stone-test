@@ -38,13 +38,11 @@ public class ValidationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
-        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void initiateApp() {
-        Log.d(TAG, "initiateApp() called");
         /*
         Este deve ser, obrigatoriamente, o primeiro metodo
          * a ser chamado. E um metodo que trabalha com sessao.
@@ -96,7 +94,6 @@ public class ValidationActivity extends AppCompatActivity {
 
     @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
     void showDenied() {
-        Log.d(TAG, "showDenied() called");
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -107,7 +104,6 @@ public class ValidationActivity extends AppCompatActivity {
 
     @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
     void showNeverAskAgain() {
-        Log.d(TAG, "showNeverAskAgain() called");
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -120,7 +116,6 @@ public class ValidationActivity extends AppCompatActivity {
     }
 
     private void continueApplication() {
-        Log.d(TAG, "continueApplication() called");
         int SPLASH_DISPLAY_LENGTH = 1000;
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -135,7 +130,6 @@ public class ValidationActivity extends AppCompatActivity {
 
     @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
     void showRationale(final PermissionRequest request) {
-        Log.d(TAG, "showRationale() called with: request = [" + request + "]");
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -145,7 +139,6 @@ public class ValidationActivity extends AppCompatActivity {
     }
 
     private void buildPermissionDialog(DialogInterface.OnClickListener listener) {
-        Log.d(TAG, "buildPermissionDialog() called with: listener = [" + listener + "]");
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Android 6.0")
                 .setCancelable(false)
@@ -156,7 +149,6 @@ public class ValidationActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
@@ -164,7 +156,6 @@ public class ValidationActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(TAG, "onRequestPermissionsResult() called with: requestCode = [" + requestCode + "], permissions = [" + permissions + "], grantResults = [" + grantResults + "]");
         if (requestCode == REQUEST_PERMISSION_SETTINGS) {
             ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
         } else {
