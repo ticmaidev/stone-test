@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.2'
     }
 
 
@@ -14,5 +14,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+//        maven { url "https://artifacts.stone.com.br:8443/artifactory/sdk-android-prod" }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }

@@ -25,6 +25,7 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import stone.application.StoneStart;
 import stone.application.interfaces.StoneCallbackInterface;
+import stone.environment.Environment;
 import stone.providers.ActiveApplicationProvider;
 import stone.user.UserModel;
 import stone.utils.Stone;
@@ -38,6 +39,7 @@ public class ValidationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
         ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
+        Stone.setEnvironment(Environment.PRODUCTION);
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
@@ -54,7 +56,7 @@ public class ValidationActivity extends AppCompatActivity {
 
             List<String> stoneCodeList = new ArrayList<>();
             // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("846873720");
+            stoneCodeList.add("SEU_STONECODE_AQUI");
 
             final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
             activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");
@@ -119,7 +121,6 @@ public class ValidationActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 // habilita o modo desenvolvedor
-                Stone.developerMode();
                 Intent mainIntent = new Intent(ValidationActivity.this, MainActivity.class);
                 startActivity(mainIntent);
                 finish();
