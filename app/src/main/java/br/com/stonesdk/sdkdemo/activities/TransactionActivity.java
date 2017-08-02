@@ -21,7 +21,7 @@ import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.LoadTablesProvider;
 import stone.providers.TransactionProvider;
-import stone.utils.GlobalInformations;
+import stone.utils.Stone;
 import stone.utils.StoneTransaction;
 
 public class TransactionActivity extends AppCompatActivity {
@@ -73,16 +73,15 @@ public class TransactionActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
-                // Cria o objeto de transacao. Usar o "GlobalInformations.getPinpadFromListAt"
+                // Cria o objeto de transacao. Usar o "Stone.getPinpadFromListAt"
                 // significa que devera estar conectado com ao menos um pinpad, pois o metodo
                 // cria uma lista de conectados e conecta com quem estiver na posicao "0".
-                StoneTransaction stoneTransaction = new StoneTransaction(GlobalInformations.getPinpadFromListAt(0));
+                StoneTransaction stoneTransaction = new StoneTransaction(Stone.getPinpadFromListAt(0));
 
                 // A seguir deve-se popular o objeto.
                 stoneTransaction.setAmount(valueEditText.getText().toString());
                 stoneTransaction.setEmailClient(null);
-                stoneTransaction.setRequestId(null);
-                stoneTransaction.setUserModel(GlobalInformations.getUserModel(0));
+                stoneTransaction.setUserModel(Stone.getUserModel(0));
 
                 // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
@@ -100,7 +99,7 @@ public class TransactionActivity extends AppCompatActivity {
                 }
 
                 // Processo para envio da transacao.
-                final TransactionProvider provider = new TransactionProvider(TransactionActivity.this, stoneTransaction, GlobalInformations.getPinpadFromListAt(0));
+                final TransactionProvider provider = new TransactionProvider(TransactionActivity.this, stoneTransaction, Stone.getPinpadFromListAt(0));
                 provider.setWorkInBackground(false);
                 provider.setDialogMessage("Enviando..");
                 provider.setDialogTitle("Aguarde");
@@ -114,7 +113,7 @@ public class TransactionActivity extends AppCompatActivity {
                     public void onError() {
                         Toast.makeText(getApplicationContext(), "Erro na transação", Toast.LENGTH_SHORT).show();
                         if (provider.theListHasError(ErrorsEnum.NEED_LOAD_TABLES)) { // code 20
-                            LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, provider.getGcrRequestCommand(), GlobalInformations.getPinpadFromListAt(0));
+                            LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, provider.getGcrRequestCommand(), Stone.getPinpadFromListAt(0));
                             loadTablesProvider.setDialogMessage("Subindo as tabelas");
                             loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
                             loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {

@@ -5,12 +5,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,15 +35,65 @@ import stone.user.UserModel;
 import stone.utils.Stone;
 
 @RuntimePermissions
-public class ValidationActivity extends AppCompatActivity {
+public class ValidationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ValidationActivity";
     private static final int REQUEST_PERMISSION_SETTINGS = 100;
+    private EditText stoneCodeEditText;
+    private Spinner environmentSpinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
         ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
         Stone.setEnvironment(Environment.PRODUCTION);
+        findViewById(R.id.activateButton).setOnClickListener(this);
+        stoneCodeEditText = (EditText) findViewById(R.id.stoneCodeEditText);
+        environmentSpinner = (Spinner) findViewById(R.id.environmentSpinner);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapter.add(Environment.PRODUCTION.name());
+        adapter.add(Environment.SANDBOX.name());
+        environmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Environment environment = Environment.valueOf(adapter.getItem(position));
+                Stone.setEnvironment(environment);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Stone.setEnvironment(Environment.PRODUCTION);
+            }
+        });
+        environmentSpinner.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        List<String> stoneCodeList = new ArrayList<>();
+        // Adicione seu Stonecode abaixo, como string.
+        stoneCodeList.add(stoneCodeEditText.getText().toString());
+
+        final ActiveApplicationProvider provider = new ActiveApplicationProvider(this);
+        provider.setDialogMessage("Ativando o aplicativo...");
+        provider.setDialogTitle("Aguarde");
+        provider.setWorkInBackground(false);
+        provider.setConnectionCallback(new StoneCallbackInterface() {
+            /* Metodo chamado se for executado sem erros */
+            public void onSuccess() {
+                Toast.makeText(ValidationActivity.this, "Ativado com sucesso, iniciando o aplicativo", Toast.LENGTH_SHORT).show();
+                continueApplication();
+            }
+
+            /* metodo chamado caso ocorra alguma excecao */
+            public void onError() {
+                Toast.makeText(ValidationActivity.this, "Erro na ativacao do aplicativo, verifique a lista de erros do provider", Toast.LENGTH_SHORT).show();
+                    /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
+                Log.e(TAG, "onError: " + provider.getListOfErrors().toString());
+
+            }
+        });
+        provider.activate(stoneCodeList);
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
@@ -52,41 +106,8 @@ public class ValidationActivity extends AppCompatActivity {
 
         // se retornar nulo, voce provavelmente nao ativou a SDK
         // ou as informacoes da Stone SDK foram excluidas
-        if (user == null) {
-
-            List<String> stoneCodeList = new ArrayList<>();
-            // Adicione seu Stonecode abaixo, como string.
-            stoneCodeList.add("SEU_STONECODE_AQUI");
-
-            final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
-            activeApplicationProvider.setDialogMessage("Ativando o aplicativo...");
-            activeApplicationProvider.setDialogTitle("Aguarde");
-            activeApplicationProvider.setActivity(ValidationActivity.this);
-            activeApplicationProvider.setWorkInBackground(false); // informa se este provider ira rodar em background ou nao
-            activeApplicationProvider.setConnectionCallback(new StoneCallbackInterface() {
-
-				/* Sempre que utilizar um provider, intancie esta Interface.
-                 * Ela ira lhe informar se o provider foi executado com sucesso ou nao
-				 */
-
-                /* Metodo chamado se for executado sem erros */
-                public void onSuccess() {
-                    Toast.makeText(getApplicationContext(), "Ativado com sucesso, iniciando o aplicativo", Toast.LENGTH_SHORT).show();
-                    continueApplication();
-                }
-
-                /* metodo chamado caso ocorra alguma excecao */
-                public void onError() {
-                    Toast.makeText(getApplicationContext(), "Erro na ativacao do aplicativo, verifique a lista de erros do provider", Toast.LENGTH_SHORT).show();
-                    /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
-                    Log.e("Stone", "onError: " + activeApplicationProvider.getListOfErrors().toString());
-
-                }
-            });
-            activeApplicationProvider.execute();
-        } else {
-
-			/* caso ja tenha as informacoes da SDK e chamado o ActiveApplicationProvider anteriormente
+        if (user != null) {
+            /* caso ja tenha as informacoes da SDK e chamado o ActiveApplicationProvider anteriormente
                sua aplicacao podera seguir o fluxo normal */
             continueApplication();
 
@@ -117,15 +138,9 @@ public class ValidationActivity extends AppCompatActivity {
     }
 
     private void continueApplication() {
-        int SPLASH_DISPLAY_LENGTH = 1000;
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                // habilita o modo desenvolvedor
-                Intent mainIntent = new Intent(ValidationActivity.this, MainActivity.class);
-                startActivity(mainIntent);
-                finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+        Intent mainIntent = new Intent(ValidationActivity.this, MainActivity.class);
+        startActivity(mainIntent);
+        finish();
     }
 
     @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
