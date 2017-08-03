@@ -14,9 +14,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-//        maven { url "https://artifacts.stone.com.br:8443/artifactory/sdk-android-prod" }
-        flatDir {
-            dirs 'libs'
-        }
+        maven { url "https://packagecloud.io/stone/sdk-android/maven2" }
     }
 }
