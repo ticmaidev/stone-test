@@ -1,5 +1,6 @@
 package br.com.stonesdk.sdkdemo.activities;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,7 @@ import br.com.stonesdk.sdkdemo.R;
 import stone.application.enums.Action;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
+import stone.application.enums.TransactionStatusEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
 import stone.application.interfaces.StoneCallbackInterface;
@@ -85,6 +87,7 @@ public class TransactionActivity extends AppCompatActivity {
                 stoneTransaction.setAmount(valueEditText.getText().toString());
                 stoneTransaction.setEmailClient(null);
                 stoneTransaction.setUserModel(Stone.getUserModel(0));
+                stoneTransaction.setSignature(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
 
                 // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
@@ -107,9 +110,18 @@ public class TransactionActivity extends AppCompatActivity {
                 provider.setDialogMessage("Enviando..");
                 provider.setDialogTitle("Aguarde");
 
-                provider.setConnectionCallback(new StoneCallbackInterface() {
+                provider.setConnectionCallback(new StoneActionCallback() {
+                    @Override
+                    public void onStatusChanged(Action action) {
+                        Log.d("TRANSACTION_STATUS", action.name());
+                    }
+
                     public void onSuccess() {
-                        Toast.makeText(getApplicationContext(), "Transação enviada com sucesso e salva no banco. Para acessar, use o TransactionDAO.", Toast.LENGTH_SHORT).show();
+                        if (provider.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
+                            Toast.makeText(getApplicationContext(), "Transação enviada com sucesso e salva no banco. Para acessar, use o TransactionDAO.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Erro na transação: \"" + provider.getMessageFromAuthorize() + "\"", Toast.LENGTH_LONG).show();
+                        }
                         finish();
                     }
 
@@ -120,12 +132,7 @@ public class TransactionActivity extends AppCompatActivity {
                             loadTablesProvider.setDialogMessage("Subindo as tabelas");
                             loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
                             loadTablesProvider.execute();
-                            loadTablesProvider.setConnectionCallback(new StoneActionCallback() {
-                                @Override
-                                public void onStatusChanged(Action action) {
-                                    Log.d("TRANSACTION_STATUS", action.name());
-                                }
-
+                            loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
                                 public void onSuccess() {
                                     sendButton.performClick(); // simula um clique no botao de enviar transacao para reenviar a transacao.
                                 }

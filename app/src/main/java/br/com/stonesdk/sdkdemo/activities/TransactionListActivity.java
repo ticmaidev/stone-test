@@ -22,10 +22,12 @@ import stone.providers.CancellationProvider;
 import stone.providers.PrintProvider;
 import stone.utils.GlobalInformations;
 import stone.utils.PrintObject;
+import stone.utils.Stone;
 
 public class TransactionListActivity extends AppCompatActivity implements OnItemClickListener {
 
     ListView listView;
+    List<TransactionObject> transactionObjects;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,19 +38,20 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         // acessa todas as transacoes do banco de dados
         TransactionDAO transactionDAO = new TransactionDAO(getApplicationContext());
         // cria uma lista com todas as transacoes
-        List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
+        transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
 
         // exibe todas as transações (neste caso valor e status) para o usuario
         String[] rowOfList = new String[transactionObjects.size()];
         for (int i = 0; i < transactionObjects.size(); i++) {
             rowOfList[i] = String.format("%s=%s\n%s", transactionObjects.get(i).getIdFromBase(), transactionObjects.get(i).getAmount(), transactionObjects.get(i).getTransactionStatus());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, rowOfList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, rowOfList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        final TransactionObject selectedTransaction = transactionObjects.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.list_dialog_title)
                 .setMessage(R.string.list_dialog_message)
@@ -56,12 +59,12 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             // lógica da impressão
-                            List<PrintObject> listToPrint = new ArrayList<PrintObject>();
+                            List<PrintObject> listToPrint = new ArrayList<>();
                             for (int i = 0; i < 10; i++) {
                                 listToPrint.add(new PrintObject("Teste de impressão linha " + i, PrintObject.MEDIUM, PrintObject.CENTER));
                             }
                             // GlobalInformations.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
-                            final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, GlobalInformations.getPinpadFromListAt(0));
+                            final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, Stone.getPinpadFromListAt(0));
                             printProvider.setWorkInBackground(false);
                             printProvider.setDialogMessage("Imprimindo...");
                             printProvider.setConnectionCallback(new StoneCallbackInterface() {
@@ -85,11 +88,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                 })
                 .setNegativeButton(R.string.list_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // lógica do cancelamento
-                        String[] arrayIdAtPositionZero = listView.getAdapter().getItem(position).toString().split("=");
-                        final int transacionId = Integer.parseInt(arrayIdAtPositionZero[0].trim());
-
-                        final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, transacionId, GlobalInformations.getUserModel(0));
+                        final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction.getIdFromBase(), GlobalInformations.getUserModel(0));
                         cancellationProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
                         cancellationProvider.setDialogMessage("Cancelando...");
                         cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
@@ -99,7 +98,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                             }
 
                             public void onError() {
-                                Toast.makeText(getApplicationContext(), "Um erro ocorreu durante o cancelamento com a transacao de id: " + transacionId, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Um erro ocorreu durante o cancelamento com a transacao de id: " + selectedTransaction.getIdFromBase(), Toast.LENGTH_SHORT).show();
                             }
                         });
                         cancellationProvider.execute();
