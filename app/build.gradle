@@ -26,5 +26,5 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
     compile 'com.google.android.gms:play-services-location:11.0.4'
 //    compile 'com.google.android.gms:play-services-safetynet:10.2.0'
-    compile 'br.com.stone:stone-sdk:2.4.0'
+    compile 'br.com.stone:stone-sdk:2.4.1'
 }
