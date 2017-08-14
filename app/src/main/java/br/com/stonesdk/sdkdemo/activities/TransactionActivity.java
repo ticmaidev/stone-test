@@ -2,6 +2,7 @@ package br.com.stonesdk.sdkdemo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
+import stone.application.enums.Action;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TypeOfTransactionEnum;
+import stone.application.interfaces.StoneActionCallback;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.LoadTablesProvider;
 import stone.providers.TransactionProvider;
@@ -116,7 +119,13 @@ public class TransactionActivity extends AppCompatActivity {
                             LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, provider.getGcrRequestCommand(), Stone.getPinpadFromListAt(0));
                             loadTablesProvider.setDialogMessage("Subindo as tabelas");
                             loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
-                            loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
+                            loadTablesProvider.execute();
+                            loadTablesProvider.setConnectionCallback(new StoneActionCallback() {
+                                @Override
+                                public void onStatusChanged(Action action) {
+                                    Log.d("TRANSACTION_STATUS", action.name());
+                                }
+
                                 public void onSuccess() {
                                     sendButton.performClick(); // simula um clique no botao de enviar transacao para reenviar a transacao.
                                 }
@@ -125,7 +134,6 @@ public class TransactionActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Sucesso.", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            loadTablesProvider.execute();
                         }
                     }
                 });
