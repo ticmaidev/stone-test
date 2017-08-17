@@ -21,7 +21,6 @@ import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
 import stone.providers.DownloadTablesProvider;
 import stone.providers.LoadTablesProvider;
-import stone.providers.commands.gcr.GcrRequestCommand;
 import stone.utils.GlobalInformations;
 import stone.utils.Stone;
 
@@ -114,9 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                GcrRequestCommand gcrRequestCommand = new GcrRequestCommand();
-                gcrRequestCommand.setAcqidxreq("16");
-                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, gcrRequestCommand, getPinpadFromListAt(0));
+                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, "1234567890", getPinpadFromListAt(0));
                 loadTablesProvider.setDialogMessage("Subindo as tabelas");
                 loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
                 loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
