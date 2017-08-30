@@ -1,7 +1,7 @@
 package br.com.stonesdk.sdkdemo.activities;
 
-import android.Manifest;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,11 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import br.com.stonesdk.sdkdemo.R;
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.stonesdk.sdkdemo.R;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -34,6 +32,15 @@ import stone.providers.ActiveApplicationProvider;
 import stone.user.UserModel;
 import stone.utils.Stone;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+import static br.com.stonesdk.sdkdemo.activities.ValidationActivityPermissionsDispatcher.initiateAppWithCheck;
+import static stone.environment.Environment.CERTIFICATION;
+import static stone.environment.Environment.PRODUCTION;
+import static stone.environment.Environment.SANDBOX;
+import static stone.environment.Environment.valueOf;
+
 @RuntimePermissions
 public class ValidationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ValidationActivity";
@@ -44,25 +51,27 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
-        ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
-        Stone.setEnvironment(Environment.PRODUCTION);
+        initiateAppWithCheck(this);
+
+        Stone.setEnvironment(PRODUCTION);
         findViewById(R.id.activateButton).setOnClickListener(this);
         stoneCodeEditText = (EditText) findViewById(R.id.stoneCodeEditText);
         environmentSpinner = (Spinner) findViewById(R.id.environmentSpinner);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
-        adapter.add(Environment.PRODUCTION.name());
-        adapter.add(Environment.SANDBOX.name());
+        adapter.add(PRODUCTION.name());
+        adapter.add(SANDBOX.name());
+        adapter.add(CERTIFICATION.name());
         environmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Environment environment = Environment.valueOf(adapter.getItem(position));
+                Environment environment = valueOf(adapter.getItem(position));
                 Stone.setEnvironment(environment);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Stone.setEnvironment(Environment.PRODUCTION);
+                Stone.setEnvironment(PRODUCTION);
             }
         });
         environmentSpinner.setAdapter(adapter);
@@ -88,7 +97,8 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
             /* metodo chamado caso ocorra alguma excecao */
             public void onError() {
                 Toast.makeText(ValidationActivity.this, "Erro na ativacao do aplicativo, verifique a lista de erros do provider", Toast.LENGTH_SHORT).show();
-                    /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
+
+                /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
                 Log.e(TAG, "onError: " + provider.getListOfErrors().toString());
 
             }
@@ -96,12 +106,12 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         provider.activate(stoneCodeList);
     }
 
-    @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @NeedsPermission({ READ_PHONE_STATE, READ_EXTERNAL_STORAGE})
     public void initiateApp() {
-        /*
-        Este deve ser, obrigatoriamente, o primeiro metodo
+        /**
+         * Este deve ser, obrigatoriamente, o primeiro metodo
          * a ser chamado. E um metodo que trabalha com sessao.
-		 */
+		     */
         List<UserModel> user = StoneStart.init(this);
 
         // se retornar nulo, voce provavelmente nao ativou a SDK
@@ -114,22 +124,22 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnPermissionDenied({ READ_PHONE_STATE, READ_EXTERNAL_STORAGE})
     void showDenied() {
-        buildPermissionDialog(new DialogInterface.OnClickListener() {
+        buildPermissionDialog(new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ValidationActivityPermissionsDispatcher.initiateAppWithCheck(ValidationActivity.this);
+                initiateAppWithCheck(ValidationActivity.this);
             }
         });
     }
 
-    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnNeverAskAgain({ READ_PHONE_STATE, READ_EXTERNAL_STORAGE})
     void showNeverAskAgain() {
-        buildPermissionDialog(new DialogInterface.OnClickListener() {
+        buildPermissionDialog(new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Intent intent = new Intent(ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", getPackageName(), null);
                 intent.setData(uri);
                 startActivityForResult(intent, REQUEST_PERMISSION_SETTINGS);
@@ -143,9 +153,9 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         finish();
     }
 
-    @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnShowRationale({ READ_PHONE_STATE, READ_EXTERNAL_STORAGE})
     void showRationale(final PermissionRequest request) {
-        buildPermissionDialog(new DialogInterface.OnClickListener() {
+        buildPermissionDialog(new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 request.proceed();
@@ -153,7 +163,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void buildPermissionDialog(DialogInterface.OnClickListener listener) {
+    private void buildPermissionDialog(OnClickListener listener) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Android 6.0")
                 .setCancelable(false)
@@ -167,7 +177,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_SETTINGS) {
-            ValidationActivityPermissionsDispatcher.initiateAppWithCheck(this);
+            initiateAppWithCheck(this);
         }
         ValidationActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }

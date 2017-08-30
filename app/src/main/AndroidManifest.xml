@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.stonesdk.sdkdemo">
 
-    <!-- Permissoes necessarias para o pleno funcionamento do aplicativo e da SDK -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.INTERNET" />
+  <!-- Permissoes necessarias para o pleno funcionamento do aplicativo e da SDK -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".application.DemoApplication"
@@ -34,6 +34,10 @@
         <activity
             android:name=".activities.TransactionListActivity"
             android:label="@string/title_activity_transaction_list" />
+      <activity
+          android:name=".activities.DisconnectPinpadActivity"
+          android:label="@string/title_activity_disconnect_pinpad"
+          android:theme="@style/AppThemeWithoutBar" />
 
         <activity
             android:name=".activities.ValidationActivity"
@@ -42,9 +46,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+  </application>
 
 </manifest>
