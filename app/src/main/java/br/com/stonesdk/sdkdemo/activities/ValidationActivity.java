@@ -1,5 +1,6 @@
 package br.com.stonesdk.sdkdemo.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -15,9 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import br.com.stonesdk.sdkdemo.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.stonesdk.sdkdemo.R;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -43,7 +46,6 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
     private static final String TAG = "ValidationActivity";
     private static final int REQUEST_PERMISSION_SETTINGS = 100;
     private EditText stoneCodeEditText;
-    private Spinner environmentSpinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +54,8 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
 
         Stone.setEnvironment(PRODUCTION);
         findViewById(R.id.activateButton).setOnClickListener(this);
-        stoneCodeEditText = (EditText) findViewById(R.id.stoneCodeEditText);
-        environmentSpinner = (Spinner) findViewById(R.id.environmentSpinner);
+        stoneCodeEditText = findViewById(R.id.stoneCodeEditText);
+        Spinner environmentSpinner = findViewById(R.id.environmentSpinner);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapter.add(PRODUCTION.name());
@@ -108,7 +110,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         /**
          * Este deve ser, obrigatoriamente, o primeiro metodo
          * a ser chamado. E um metodo que trabalha com sessao.
-		     */
+         */
         List<UserModel> user = StoneStart.init(this);
 
         // se retornar nulo, voce provavelmente nao ativou a SDK
