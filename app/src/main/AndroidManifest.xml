@@ -31,6 +31,10 @@
         <activity
             android:name=".activities.TransactionListActivity"
             android:label="@string/title_activity_transaction_list" />
+      <activity
+          android:name=".activities.DisconnectPinpadActivity"
+          android:label="@string/title_activity_disconnect_pinpad"
+          android:theme="@style/AppThemeWithoutBar" />
 
         <activity
             android:name=".activities.ValidationActivity"
@@ -39,9 +43,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+  </application>
 
 </manifest>
