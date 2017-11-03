@@ -96,7 +96,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         provider.activate(stoneCodeList);
     }
 
-    @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE})
     public void initiateApp() {
         /*
         Este deve ser, obrigatoriamente, o primeiro metodo
@@ -114,7 +114,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnPermissionDenied({Manifest.permission.READ_EXTERNAL_STORAGE})
     void showDenied() {
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
@@ -124,7 +124,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnNeverAskAgain({Manifest.permission.READ_EXTERNAL_STORAGE})
     void showNeverAskAgain() {
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
@@ -143,7 +143,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         finish();
     }
 
-    @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    @OnShowRationale({Manifest.permission.READ_EXTERNAL_STORAGE})
     void showRationale(final PermissionRequest request) {
         buildPermissionDialog(new DialogInterface.OnClickListener() {
             @Override
