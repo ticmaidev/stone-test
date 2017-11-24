@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 "Dispositivos pareados",
                 "Fazer uma transação",
                 "Listar transações",
-                "Envio de e-mail",
                 "Atualizar Tabelas",
                 "Mostrar Mensagem no pinpad",
                 "Desativar",
@@ -77,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 startActivity(transactionListIntent);
                 break;
             case 3:
-                Intent sendEmailIntent = new Intent(MainActivity.this, SendEmailActivity.class);
-                startActivity(sendEmailIntent);
-                break;
-            case 4:
                 if (Stone.getPinpadListSize() == null || Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
@@ -99,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 });
                 loadTablesProvider.execute();
                 break;
-            case 5:
+            case 4:
                 if (Stone.getPinpadListSize() == null || Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
@@ -127,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
                 builder.show();
                 break;
-            case 6:
+            case 5:
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
@@ -149,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     }
                 });
                 provider.deactivate();
-            case 7:
+            case 6:
                 Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
                 startActivity(closeBluetoothConnectionIntent);
                 break;
