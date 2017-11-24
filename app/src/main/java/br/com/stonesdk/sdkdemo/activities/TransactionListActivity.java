@@ -20,6 +20,7 @@ import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
 import stone.providers.CancellationProvider;
 import stone.providers.PrintProvider;
+import stone.providers.SendEmailTransactionProvider;
 import stone.utils.GlobalInformations;
 import stone.utils.PrintObject;
 import stone.utils.Stone;
@@ -84,6 +85,25 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                             Toast.makeText(getApplicationContext(), "Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
+                    }
+                })
+                .setNeutralButton("Enviar Comprovante", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
+                        sendEmailProvider.useDefaultUI(false);
+                        sendEmailProvider.setEmailToSent("email@gmail.com");
+                        sendEmailProvider.setDialogMessage("Enviando comprovante");
+                        sendEmailProvider.setConnectionCallback(new StoneCallbackInterface() {
+                            public void onSuccess() {
+                                Toast.makeText(getApplicationContext(), "Enviado com sucesso", Toast.LENGTH_LONG).show();
+                            }
+
+                            public void onError() {
+                                Toast.makeText(getApplicationContext(), "Nao enviado", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        sendEmailProvider.execute();
                     }
                 })
                 .setNegativeButton(R.string.list_dialog_cancel, new DialogInterface.OnClickListener() {
