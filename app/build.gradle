@@ -27,5 +27,5 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.1.0'
-    compile ('br.com.stone:stone-sdk:2.5.1-RC6')
+    compile ('br.com.stone:stone-sdk:2.5.1-RC7')
 }
