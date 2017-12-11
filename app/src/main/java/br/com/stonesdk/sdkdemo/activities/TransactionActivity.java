@@ -92,8 +92,8 @@ public class TransactionActivity extends AppCompatActivity {
                 // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
                 // necessario, faca conforme a linha abaixo.
-                stoneTransaction.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
-
+//                stoneTransaction.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
+    
                 // Informa a quantidade de parcelas.
                 stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.getAt(instalmentsSpinner.getSelectedItemPosition()));
 
