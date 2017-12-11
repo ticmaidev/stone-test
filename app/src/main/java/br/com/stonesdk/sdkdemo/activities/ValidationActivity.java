@@ -36,7 +36,6 @@ import stone.utils.Stone;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static br.com.stonesdk.sdkdemo.activities.ValidationActivityPermissionsDispatcher.initiateAppWithCheck;
-import static stone.environment.Environment.CERTIFICATION;
 import static stone.environment.Environment.PRODUCTION;
 import static stone.environment.Environment.SANDBOX;
 import static stone.environment.Environment.valueOf;
@@ -52,7 +51,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_validation);
         initiateAppWithCheck(this);
 
-        Stone.setEnvironment(PRODUCTION);
+        Stone.setEnvironment(SANDBOX);
         findViewById(R.id.activateButton).setOnClickListener(this);
         stoneCodeEditText = findViewById(R.id.stoneCodeEditText);
         Spinner environmentSpinner = findViewById(R.id.environmentSpinner);
@@ -60,7 +59,6 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapter.add(PRODUCTION.name());
         adapter.add(SANDBOX.name());
-        adapter.add(CERTIFICATION.name());
         environmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
