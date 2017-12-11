@@ -24,7 +24,7 @@ import stone.utils.Stone;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static stone.utils.GlobalInformations.getPinpadFromListAt;
+import static stone.utils.Stone.getPinpadFromListAt;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 }
                 LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, "1234567890", getPinpadFromListAt(0));
                 loadTablesProvider.setDialogMessage("Subindo as tabelas");
-                loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
+                loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                 loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
                     public void onSuccess() {
                         makeText(getApplicationContext(), "Sucesso.", LENGTH_SHORT).show();
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
-                provider.setWorkInBackground(false);
+                provider.useDefaultUI(false);
                 provider.setConnectionCallback(new StoneCallbackInterface() {
                     /* Metodo chamado se for executado sem erros */
                     public void onSuccess() {
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             // Realiza processo de download das tabelas em sua totalidade.
             DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(MainActivity.this, Stone.getUserModel(0));
             downloadTablesProvider.setDialogMessage("Baixando as tabelas, por favor aguarde");
-            downloadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
+            downloadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
             downloadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
                 public void onSuccess() {
                     makeText(getApplicationContext(), "Tabelas baixadas com sucesso",

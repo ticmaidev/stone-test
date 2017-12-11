@@ -18,10 +18,10 @@ import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
+import stone.email.pombo.Contact;
 import stone.providers.CancellationProvider;
 import stone.providers.PrintProvider;
 import stone.providers.SendEmailTransactionProvider;
-import stone.utils.GlobalInformations;
 import stone.utils.PrintObject;
 import stone.utils.Stone;
 
@@ -64,9 +64,9 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                             for (int i = 0; i < 10; i++) {
                                 listToPrint.add(new PrintObject("Teste de impressão linha " + i, PrintObject.MEDIUM, PrintObject.CENTER));
                             }
-                            // GlobalInformations.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
+                            // Stone.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
                             final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, Stone.getPinpadFromListAt(0));
-                            printProvider.setWorkInBackground(false);
+                            printProvider.useDefaultUI(false);
                             printProvider.setDialogMessage("Imprimindo...");
                             printProvider.setConnectionCallback(new StoneCallbackInterface() {
                                 public void onSuccess() {
@@ -92,7 +92,8 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                     public void onClick(DialogInterface dialog, int which) {
                         SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
                         sendEmailProvider.useDefaultUI(false);
-                        sendEmailProvider.setEmailToSent("email@gmail.com");
+                        sendEmailProvider.addTo(new Contact("cliente@gmail.com","Nome do Cliente"));
+                        sendEmailProvider.setFrom(new Contact("loja@gmail.com","Nome do Estabelecimento"));
                         sendEmailProvider.setDialogMessage("Enviando comprovante");
                         sendEmailProvider.setConnectionCallback(new StoneCallbackInterface() {
                             public void onSuccess() {
@@ -108,8 +109,8 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                 })
                 .setNegativeButton(R.string.list_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction.getIdFromBase(), GlobalInformations.getUserModel(0));
-                        cancellationProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
+                        final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction.getIdFromBase(), Stone.getUserModel(0));
+                        cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                         cancellationProvider.setDialogMessage("Cancelando...");
                         cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
                             public void onSuccess() {

@@ -83,7 +83,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         final ActiveApplicationProvider provider = new ActiveApplicationProvider(this);
         provider.setDialogMessage("Ativando o aplicativo...");
         provider.setDialogTitle("Aguarde");
-        provider.setWorkInBackground(false);
+        provider.useDefaultUI(false);
         provider.setConnectionCallback(new StoneCallbackInterface() {
             /* Metodo chamado se for executado sem erros */
             public void onSuccess() {

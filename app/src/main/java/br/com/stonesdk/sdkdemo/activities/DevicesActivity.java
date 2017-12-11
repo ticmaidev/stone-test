@@ -73,7 +73,7 @@ public class DevicesActivity extends AppCompatActivity implements OnItemClickLis
         // Passa o pinpad selecionado para o provider de conexão bluetooth.
         BluetoothConnectionProvider bluetoothConnectionProvider = new BluetoothConnectionProvider(DevicesActivity.this, pinpadSelected);
         bluetoothConnectionProvider.setDialogMessage("Criando conexao com o pinpad selecionado"); // Mensagem exibida do dialog.
-        bluetoothConnectionProvider.setWorkInBackground(false); // Informa que haverá um feedback para o usuário.
+        bluetoothConnectionProvider.useDefaultUI(false); // Informa que haverá um feedback para o usuário.
         bluetoothConnectionProvider.setConnectionCallback(new StoneCallbackInterface() {
 
             public void onSuccess() {

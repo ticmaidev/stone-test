@@ -106,7 +106,7 @@ public class TransactionActivity extends AppCompatActivity {
 
                 // Processo para envio da transacao.
                 final TransactionProvider provider = new TransactionProvider(TransactionActivity.this, stoneTransaction, Stone.getPinpadFromListAt(0));
-                provider.setWorkInBackground(false);
+                provider.useDefaultUI(false);
                 provider.setDialogMessage("Enviando..");
                 provider.setDialogTitle("Aguarde");
 
@@ -130,7 +130,7 @@ public class TransactionActivity extends AppCompatActivity {
                         if (provider.theListHasError(ErrorsEnum.NEED_LOAD_TABLES)) { // code 20
                             LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, provider.getGcrRequestCommand(), Stone.getPinpadFromListAt(0));
                             loadTablesProvider.setDialogMessage("Subindo as tabelas");
-                            loadTablesProvider.setWorkInBackground(false); // para dar feedback ao usuario ou nao.
+                            loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                             loadTablesProvider.execute();
                             loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
                                 public void onSuccess() {
