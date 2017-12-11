@@ -34,7 +34,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_list);
 
-        listView = (ListView) findViewById(R.id.listTransactionActivity);
+        listView = findViewById(R.id.listTransactionActivity);
 
         // acessa todas as transacoes do banco de dados
         TransactionDAO transactionDAO = new TransactionDAO(getApplicationContext());

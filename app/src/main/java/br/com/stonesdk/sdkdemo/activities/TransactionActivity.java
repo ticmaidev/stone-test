@@ -43,13 +43,13 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-        valueTextView = (TextView) findViewById(R.id.textViewValue);
-        numberInstallmentsTextView = (TextView) findViewById(R.id.textViewInstallments);
-        valueEditText = (EditText) findViewById(R.id.editTextValue);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupDebitCredit);
-        sendButton = (Button) findViewById(R.id.buttonSendTransaction);
-        instalmentsSpinner = (Spinner) findViewById(R.id.spinnerInstallments);
-        debitRadioButton = (RadioButton) findViewById(R.id.radioDebit);
+        valueTextView = findViewById(R.id.textViewValue);
+        numberInstallmentsTextView = findViewById(R.id.textViewInstallments);
+        valueEditText = findViewById(R.id.editTextValue);
+        radioGroup = findViewById(R.id.radioGroupDebitCredit);
+        sendButton = findViewById(R.id.buttonSendTransaction);
+        instalmentsSpinner = findViewById(R.id.spinnerInstallments);
+        debitRadioButton = findViewById(R.id.radioDebit);
 
         numberInstallmentsTextView.setVisibility(View.INVISIBLE);
         instalmentsSpinner.setVisibility(View.INVISIBLE);
@@ -93,7 +93,7 @@ public class TransactionActivity extends AppCompatActivity {
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
                 // necessario, faca conforme a linha abaixo.
 //                stoneTransaction.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
-    
+
                 // Informa a quantidade de parcelas.
                 stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.getAt(instalmentsSpinner.getSelectedItemPosition()));
 

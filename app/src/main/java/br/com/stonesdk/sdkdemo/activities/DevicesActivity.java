@@ -28,7 +28,7 @@ public class DevicesActivity extends AppCompatActivity implements OnItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
 
-        listView = (ListView) findViewById(R.id.listDevicesActivity);
+        listView = findViewById(R.id.listDevicesActivity);
         listView.setOnItemClickListener(this);
         turnBluetoothOn();
         listBluetoothDevices();
@@ -37,7 +37,7 @@ public class DevicesActivity extends AppCompatActivity implements OnItemClickLis
     public void listBluetoothDevices() {
 
         // Lista de Pinpads para passar para o BluetoothConnectionProvider.
-        ArrayAdapter<String> btArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        ArrayAdapter<String> btArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.listMainActivity);
+        listView = findViewById(R.id.listMainActivity);
 
         String[] options = new String[]{
                 "Dispositivos pareados",
