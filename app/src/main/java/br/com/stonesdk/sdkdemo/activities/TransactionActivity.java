@@ -128,7 +128,7 @@ public class TransactionActivity extends AppCompatActivity {
                     public void onError() {
                         Toast.makeText(getApplicationContext(), "Erro na transação", Toast.LENGTH_SHORT).show();
                         if (provider.theListHasError(ErrorsEnum.NEED_LOAD_TABLES)) { // code 20
-                            LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, provider.getGcrRequestCommand(), Stone.getPinpadFromListAt(0));
+                            LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, Stone.getPinpadFromListAt(0), Stone.getUserModel(0));
                             loadTablesProvider.setDialogMessage("Subindo as tabelas");
                             loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                             loadTablesProvider.execute();

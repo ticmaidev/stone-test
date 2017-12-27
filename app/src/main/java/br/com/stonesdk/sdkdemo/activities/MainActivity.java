@@ -53,17 +53,16 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int itemPosition = position;
 
         // Para cada nova opção na lista, um novo "case" precisa ser inserido aqui.
-        switch (itemPosition) {
+        switch (position) {
             case 0:
                 Intent devicesIntent = new Intent(MainActivity.this, DevicesActivity.class);
                 startActivity(devicesIntent);
                 break;
             case 1:
                 // Verifica se o bluetooth esta ligado e se existe algum pinpad conectado.
-                if (Stone.getPinpadListSize() != null && Stone.getPinpadListSize() > 0) {
+                if (Stone.getPinpadListSize() > 0) {
                     Intent transactionIntent = new Intent(MainActivity.this, TransactionActivity.class);
                     startActivity(transactionIntent);
                     break;
@@ -76,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 startActivity(transactionListIntent);
                 break;
             case 3:
-                if (Stone.getPinpadListSize() == null || Stone.getPinpadListSize() <= 0) {
+                if (Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
                 }
-                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, "1234567890", getPinpadFromListAt(0));
+                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, getPinpadFromListAt(0), Stone.getUserModel(0));
                 loadTablesProvider.setDialogMessage("Subindo as tabelas");
                 loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                 loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 loadTablesProvider.execute();
                 break;
             case 4:
-                if (Stone.getPinpadListSize() == null || Stone.getPinpadListSize() <= 0) {
+                if (Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
                 }
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         // IMPORTANTE: Mantenha esse provider na sua MAIN, pois ele ira baixar as
         // tabelas AIDs e CAPKs dos servidores da Stone e sera utilizada quando necessário.
         ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
-        if (!applicationCache.checkIfHasTables()) {
+        if (!applicationCache.checkIfHasTables(Stone.getUserModel(0).getTableVersion())) {
 
             // Realiza processo de download das tabelas em sua totalidade.
             DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(MainActivity.this, Stone.getUserModel(0));

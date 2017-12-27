@@ -57,8 +57,9 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         Spinner environmentSpinner = findViewById(R.id.environmentSpinner);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
-        adapter.add(PRODUCTION.name());
-        adapter.add(SANDBOX.name());
+        for (Environment env : Environment.values()) {
+            adapter.add(env.name());
+        }
         environmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

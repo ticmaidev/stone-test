@@ -40,7 +40,7 @@ public class DisconnectPinpadActivity extends AppCompatActivity {
 
     private void setPinpadsToSpinner() {
 
-        if (Stone.getPinpadListSize() == null || Stone.getPinpadListSize() == 0) {
+        if (Stone.getPinpadListSize() == 0) {
             finish();
             return;
         }
