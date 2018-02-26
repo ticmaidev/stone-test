@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,6 @@ public class DisconnectPinpadActivity extends AppCompatActivity {
     }
 
     private void setPinpadsToSpinner() {
-
-        if (Stone.getPinpadListSize() == 0) {
-            finish();
-            return;
-        }
 
         List<String> pinpads = new ArrayList<>();
         for (Integer i = 0; i < Stone.getPinpadListSize(); i++)

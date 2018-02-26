@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
@@ -144,8 +145,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 });
                 provider.deactivate();
             case 6:
-                Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
-                startActivity(closeBluetoothConnectionIntent);
+                if (Stone.getPinpadListSize() > 0) {
+                    Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
+                    startActivity(closeBluetoothConnectionIntent);
+                } else {
+                    Toast.makeText(this, "Nenhum device Conectado", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
