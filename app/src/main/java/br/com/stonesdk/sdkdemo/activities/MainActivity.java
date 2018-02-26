@@ -21,6 +21,7 @@ import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
 import stone.providers.DownloadTablesProvider;
 import stone.providers.LoadTablesProvider;
+import stone.providers.ReversalProvider;
 import stone.utils.Stone;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 "Listar transações",
                 "Atualizar Tabelas",
                 "Mostrar Mensagem no pinpad",
+                "Cancelar transações com erro",
                 "Desativar",
                 "Desconectar com um pinpad"
         };
@@ -123,6 +125,23 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 builder.show();
                 break;
             case 5:
+                final ReversalProvider reversalProvider = new ReversalProvider(this);
+                reversalProvider.useDefaultUI(true);
+                reversalProvider.setDialogMessage("Cancelando transações com erro");
+                reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(MainActivity.this, "Transações canceladas com sucesso", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(MainActivity.this, "Ocorreu um erro durante o cancelamento das tabelas: " + reversalProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                reversalProvider.execute();
+                break;
+            case 6:
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
@@ -144,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     }
                 });
                 provider.deactivate();
-            case 6:
+            case 7:
                 if (Stone.getPinpadListSize() > 0) {
                     Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
                     startActivity(closeBluetoothConnectionIntent);
