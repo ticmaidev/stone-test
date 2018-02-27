@@ -1,33 +1,30 @@
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="br.com.stonesdk.sdkdemo.activities.TransactionActivity">
-
-    <TextView
-        android:id="@+id/textViewValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/transaction_value"
-        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/editTextValue"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textViewValue"
-        android:layout_alignTop="@+id/textViewValue"
-        android:layout_toRightOf="@+id/textViewValue"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/transaction_enter_value"
-        android:inputType="number">
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroupDebitCredit"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroupDebitCredit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/radioGroupDebitCredit">
 
-        <requestFocus />
+        <requestFocus
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </EditText>
 
     <RadioGroup
@@ -35,7 +32,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextValue"
-        android:layout_marginTop="20dp">
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
             android:id="@+id/radioDebit"
@@ -58,24 +59,62 @@
         android:id="@+id/textViewInstallments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGroupDebitCredit"
-        android:layout_marginTop="20dp"
-        android:text="@string/transaction_no_installments" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/transaction_no_installments"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupDebitCredit" />
 
     <Spinner
         android:id="@+id/spinnerInstallments"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewInstallments"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="5dp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewInstallments"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInstallments" />
 
     <Button
         android:id="@+id/buttonSendTransaction"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:text="@string/transaction_send_button" />
+        android:layout_width="0dp"
+        android:layout_height="53dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/transaction_send_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/captureTransactionCheckBox" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/logTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSendTransaction" />
+
+    <CheckBox
+        android:id="@+id/captureTransactionCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Transação com Captura"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerInstallments" />
+
+</android.support.constraint.ConstraintLayout>

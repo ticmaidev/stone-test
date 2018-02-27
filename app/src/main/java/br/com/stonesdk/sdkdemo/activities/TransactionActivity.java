@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,6 +39,7 @@ public class TransactionActivity extends AppCompatActivity {
     RadioButton debitRadioButton;
     Button sendButton;
     Spinner instalmentsSpinner;
+    CheckBox captureTransactionCheckBox;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class TransactionActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.buttonSendTransaction);
         instalmentsSpinner = findViewById(R.id.spinnerInstallments);
         debitRadioButton = findViewById(R.id.radioDebit);
+        captureTransactionCheckBox = findViewById(R.id.captureTransactionCheckBox);
 
         numberInstallmentsTextView.setVisibility(View.INVISIBLE);
         instalmentsSpinner.setVisibility(View.INVISIBLE);
@@ -88,6 +91,7 @@ public class TransactionActivity extends AppCompatActivity {
                 stoneTransaction.setEmailClient(null);
                 stoneTransaction.setUserModel(Stone.getUserModel(0));
                 stoneTransaction.setSignature(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
+                stoneTransaction.setCapture(captureTransactionCheckBox.isChecked());
 
                 // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
