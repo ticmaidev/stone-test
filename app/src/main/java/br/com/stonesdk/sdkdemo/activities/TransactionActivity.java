@@ -32,7 +32,6 @@ import stone.utils.StoneTransaction;
 
 public class TransactionActivity extends AppCompatActivity {
 
-    TextView valueTextView;
     TextView numberInstallmentsTextView;
     EditText valueEditText;
     RadioGroup radioGroup;
@@ -45,7 +44,6 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-        valueTextView = findViewById(R.id.textViewValue);
         numberInstallmentsTextView = findViewById(R.id.textViewInstallments);
         valueEditText = findViewById(R.id.editTextValue);
         radioGroup = findViewById(R.id.radioGroupDebitCredit);
