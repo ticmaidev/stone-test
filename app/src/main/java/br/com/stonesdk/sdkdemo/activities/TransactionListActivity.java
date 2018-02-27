@@ -20,6 +20,7 @@ import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
 import stone.email.pombo.Contact;
 import stone.providers.CancellationProvider;
+import stone.providers.CaptureTransactionProvider;
 import stone.providers.PrintProvider;
 import stone.providers.SendEmailTransactionProvider;
 import stone.utils.PrintObject;
@@ -53,79 +54,115 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
 
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         final TransactionObject selectedTransaction = transactionObjects.get(position);
+        ArrayList<String> optionsList = new ArrayList<String>() {{
+            add("Imprimir comprovante");
+            add("Cancelar");
+            add("Enviar via do cliente");
+            add("Enviar via do estabelecimento");
+        }};
+        if (!selectedTransaction.isCapture()) {
+            optionsList.add("Capturar Transação");
+        }
+        String[] options = new String[optionsList.size()];
+        optionsList.toArray(options);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.list_dialog_title)
-                .setMessage(R.string.list_dialog_message)
-                .setPositiveButton(R.string.list_dialog_print, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            // lógica da impressão
-                            List<PrintObject> listToPrint = new ArrayList<>();
-                            for (int i = 0; i < 10; i++) {
-                                listToPrint.add(new PrintObject("Teste de impressão linha " + i, PrintObject.MEDIUM, PrintObject.CENTER));
-                            }
-                            // Stone.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
-                            final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, Stone.getPinpadFromListAt(0));
-                            printProvider.useDefaultUI(false);
-                            printProvider.setDialogMessage("Imprimindo...");
-                            printProvider.setConnectionCallback(new StoneCallbackInterface() {
-                                public void onSuccess() {
-                                    Toast.makeText(getApplicationContext(), "Impressão realizada com sucesso", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-
-                                public void onError() {
-                                    Toast.makeText(getApplicationContext(), "Um erro ocorreu durante a impressão", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            printProvider.execute();
-                        } catch (IndexOutOfBoundsException outException) {
-                            Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                })
-                .setNeutralButton("Enviar Comprovante", new DialogInterface.OnClickListener() {
+                .setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
-                        sendEmailProvider.useDefaultUI(false);
-                        sendEmailProvider.addTo(new Contact("cliente@gmail.com","Nome do Cliente"));
-                        sendEmailProvider.setFrom(new Contact("loja@gmail.com","Nome do Estabelecimento"));
-                        sendEmailProvider.setDialogMessage("Enviando comprovante");
-                        sendEmailProvider.setConnectionCallback(new StoneCallbackInterface() {
-                            public void onSuccess() {
-                                Toast.makeText(getApplicationContext(), "Enviado com sucesso", Toast.LENGTH_LONG).show();
-                            }
+                        switch (which) {
+                            case 0:
+                                try {
+                                    // lógica da impressão
+                                    List<PrintObject> listToPrint = new ArrayList<>();
+                                    for (int i = 0; i < 10; i++) {
+                                        listToPrint.add(new PrintObject("Teste de impressão linha " + i, PrintObject.MEDIUM, PrintObject.CENTER));
+                                    }
+                                    // Stone.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
+                                    final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, Stone.getPinpadFromListAt(0));
+                                    printProvider.useDefaultUI(false);
+                                    printProvider.setDialogMessage("Imprimindo...");
+                                    printProvider.setConnectionCallback(new StoneCallbackInterface() {
+                                        public void onSuccess() {
+                                            Toast.makeText(getApplicationContext(), "Impressão realizada com sucesso", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
 
-                            public void onError() {
-                                Toast.makeText(getApplicationContext(), "Nao enviado", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        sendEmailProvider.execute();
-                    }
-                })
-                .setNegativeButton(R.string.list_dialog_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction.getIdFromBase(), Stone.getUserModel(0));
-                        cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-                        cancellationProvider.setDialogMessage("Cancelando...");
-                        cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
-                            public void onSuccess() {
-                                Toast.makeText(getApplicationContext(), cancellationProvider.getMessageFromAuthorize(), Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
+                                        public void onError() {
+                                            Toast.makeText(getApplicationContext(), "Um erro ocorreu durante a impressão", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    printProvider.execute();
+                                } catch (IndexOutOfBoundsException outException) {
+                                    Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case 1:
+                                final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction);
+                                cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
+                                cancellationProvider.setDialogMessage("Cancelando...");
+                                cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
+                                    public void onSuccess() {
+                                        Toast.makeText(getApplicationContext(), cancellationProvider.getMessageFromAuthorize(), Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
 
-                            public void onError() {
-                                Toast.makeText(getApplicationContext(), "Um erro ocorreu durante o cancelamento com a transacao de id: " + selectedTransaction.getIdFromBase(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        cancellationProvider.execute();
+                                    public void onError() {
+                                        Toast.makeText(getApplicationContext(), "Um erro ocorreu durante o cancelamento com a transacao de id: " + selectedTransaction.getIdFromBase(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                cancellationProvider.execute();
+                                break;
+                            case 2:
+                                sendReceipt(selectedTransaction, false);
+                                break;
+                            case 3:
+                                sendReceipt(selectedTransaction, true);
+                                break;
+                            case 4:
+                                final CaptureTransactionProvider provider = new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
+                                provider.useDefaultUI(true);
+                                provider.setDialogMessage("Efetuando Captura...");
+                                provider.setConnectionCallback(new StoneCallbackInterface() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(TransactionListActivity.this, "Transação Capturada com sucesso!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        Toast.makeText(TransactionListActivity.this, "Ocorreu um erro captura da transacao: " + provider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                                break;
+                        }
                     }
                 });
         builder.create();
         builder.show();
+    }
+
+    private void sendReceipt(TransactionObject selectedTransaction, boolean merchantReceipt) {
+        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
+        sendEmailProvider.useDefaultUI(false);
+        sendEmailProvider.setMerchantReceipt(merchantReceipt);
+        sendEmailProvider.addTo(new Contact("cliente@gmail.com", "Nome do Cliente"));
+        sendEmailProvider.setFrom(new Contact("loja@gmail.com", "Nome do Estabelecimento"));
+        sendEmailProvider.setDialogMessage("Enviando comprovante");
+        sendEmailProvider.setConnectionCallback(new StoneCallbackInterface() {
+            public void onSuccess() {
+                Toast.makeText(getApplicationContext(), "Enviado com sucesso", Toast.LENGTH_LONG).show();
+            }
+
+            public void onError() {
+                Toast.makeText(getApplicationContext(), "Nao enviado", Toast.LENGTH_LONG).show();
+            }
+        });
+        sendEmailProvider.execute();
     }
 }

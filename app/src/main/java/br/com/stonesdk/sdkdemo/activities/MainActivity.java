@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
-                provider.useDefaultUI(false);
+                provider.useDefaultUI(true);
                 provider.setConnectionCallback(new StoneCallbackInterface() {
                     /* Metodo chamado se for executado sem erros */
                     public void onSuccess() {
@@ -157,8 +157,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     /* metodo chamado caso ocorra alguma excecao */
                     public void onError() {
                         makeText(MainActivity.this, "Erro na ativacao do aplicativo, verifique a lista de erros do provider", LENGTH_SHORT).show();
-
-            /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
+                         /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
                         Log.e("MainActivity", "onError: " + provider.getListOfErrors().toString());
                     }
                 });
@@ -191,13 +190,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             downloadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
             downloadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
                 public void onSuccess() {
-                    makeText(getApplicationContext(), "Tabelas baixadas com sucesso",
-                            LENGTH_SHORT).show();
+                    makeText(getApplicationContext(), "Tabelas baixadas com sucesso", LENGTH_SHORT).show();
                 }
 
                 public void onError() {
-                    makeText(getApplicationContext(), "Erro no download das tabelas",
-                            LENGTH_SHORT).show();
+                    makeText(getApplicationContext(), "Erro no download das tabelas", LENGTH_SHORT).show();
                 }
             });
             downloadTablesProvider.execute();
