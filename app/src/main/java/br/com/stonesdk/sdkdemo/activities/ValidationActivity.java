@@ -35,7 +35,7 @@ import stone.user.UserModel;
 import stone.utils.Stone;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static br.com.stonesdk.sdkdemo.activities.ValidationActivityPermissionsDispatcher.initiateAppWithCheck;
+import static br.com.stonesdk.sdkdemo.activities.ValidationActivityPermissionsDispatcher.initiateAppWithPermissionCheck;
 import static stone.environment.Environment.PRODUCTION;
 import static stone.environment.Environment.SANDBOX;
 import static stone.environment.Environment.valueOf;
@@ -49,7 +49,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
-        initiateAppWithCheck(this);
+        initiateAppWithPermissionCheck(this);
 
         Stone.setEnvironment(SANDBOX);
         findViewById(R.id.activateButton).setOnClickListener(this);
@@ -127,7 +127,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
         buildPermissionDialog(new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                initiateAppWithCheck(ValidationActivity.this);
+                initiateAppWithPermissionCheck(ValidationActivity.this);
             }
         });
     }
@@ -175,7 +175,7 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_SETTINGS) {
-            initiateAppWithCheck(this);
+            initiateAppWithPermissionCheck(this);
         }
         ValidationActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
