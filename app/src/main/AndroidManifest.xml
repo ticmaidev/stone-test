@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.stonesdk.sdkdemo">
 
     <!-- Permissoes necessarias para o pleno funcionamento do aplicativo e da SDK -->
@@ -28,11 +27,10 @@
         <activity
             android:name=".activities.TransactionListActivity"
             android:label="@string/title_activity_transaction_list" />
-      <activity
-          android:name=".activities.DisconnectPinpadActivity"
-          android:label="@string/title_activity_disconnect_pinpad"
-          android:theme="@style/AppThemeWithoutBar" />
-
+        <activity
+            android:name=".activities.DisconnectPinpadActivity"
+            android:label="@string/title_activity_disconnect_pinpad"
+            android:theme="@style/AppThemeWithoutBar" />
         <activity
             android:name=".activities.ValidationActivity"
             android:label="@string/title_activity_validation"
@@ -40,9 +38,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-  </application>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.PosAndroidActivity"></activity>
+    </application>
 
 </manifest>
