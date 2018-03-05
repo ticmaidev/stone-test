@@ -19,7 +19,6 @@ import stone.application.interfaces.StoneCallbackInterface;
 import stone.cache.ApplicationCache;
 import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
-import stone.providers.DownloadTablesProvider;
 import stone.providers.LoadTablesProvider;
 import stone.providers.ReversalProvider;
 import stone.utils.Stone;
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
                 }
-                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, getPinpadFromListAt(0), Stone.getUserModel(0));
+                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, getPinpadFromListAt(0));
                 loadTablesProvider.setDialogMessage("Subindo as tabelas");
                 loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                 loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
@@ -175,29 +174,4 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // IMPORTANTE: Mantenha esse provider na sua MAIN, pois ele ira baixar as
-        // tabelas AIDs e CAPKs dos servidores da Stone e sera utilizada quando necessário.
-        ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
-        if (!applicationCache.checkIfHasTables(Stone.getUserModel(0).getTableVersion())) {
-
-            // Realiza processo de download das tabelas em sua totalidade.
-            DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(MainActivity.this, Stone.getUserModel(0));
-            downloadTablesProvider.setDialogMessage("Baixando as tabelas, por favor aguarde");
-            downloadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-            downloadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
-                public void onSuccess() {
-                    makeText(getApplicationContext(), "Tabelas baixadas com sucesso", LENGTH_SHORT).show();
-                }
-
-                public void onError() {
-                    makeText(getApplicationContext(), "Erro no download das tabelas", LENGTH_SHORT).show();
-                }
-            });
-            downloadTablesProvider.execute();
-        }
-    }
 }
