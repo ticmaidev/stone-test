@@ -16,7 +16,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://packagecloud.io/stone/sdk-android/maven2" }
-//        maven { url "https://packagecloud.io/stone/sdk-android-snapshot/maven2" }
+        maven { url "https://packagecloud.io/stone/sdk-android-snapshot/maven2" }
         google()
     }
 }
