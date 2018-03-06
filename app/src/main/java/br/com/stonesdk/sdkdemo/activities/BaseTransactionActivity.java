@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.enums.Action;
+import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
@@ -24,23 +26,38 @@ import stone.providers.BaseTransactionProvider;
  * Created by felipe on 05/03/18.
  */
 
-public abstract class BaseTransactionActivity<T extends BaseTransactionProvider> extends AppCompatActivity implements StoneActionCallback, View.OnClickListener {
+public abstract class BaseTransactionActivity<T extends BaseTransactionProvider> extends AppCompatActivity implements StoneActionCallback {
     private BaseTransactionProvider transactionProvider;
-    private final TransactionObject transactionObject = new TransactionObject();
+    protected final TransactionObject transactionObject = new TransactionObject();
     RadioGroup transactionTypeRadioGroup;
     Spinner installmentsSpinner;
     TextView installmentsTextView;
     CheckBox captureTransactionCheckBox;
     EditText amountEditText;
     TextView logTextView;
+    Button sendTransactionButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+
+        transactionTypeRadioGroup = findViewById(R.id.transactionTypeRadioGroup);
+        installmentsSpinner = findViewById(R.id.installmentsSpinner);
+        installmentsTextView = findViewById(R.id.installmentsTextView);
+        captureTransactionCheckBox = findViewById(R.id.captureTransactionCheckBox);
+        amountEditText = findViewById(R.id.amountEditText);
+        logTextView = findViewById(R.id.logTextView);
+        sendTransactionButton = findViewById(R.id.sendTransactionButton);
+
         spinnerAction();
         radioGroupClick();
-        transactionTypeRadioGroup.setOnClickListener(this);
+        sendTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTransaction();
+            }
+        });
     }
 
     private void radioGroupClick() {
@@ -68,8 +85,7 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
         installmentsSpinner.setAdapter(adapter);
     }
 
-    @Override
-    public void onClick(View v) {
+    public void initTransaction() {
         // Informa a quantidade de parcelas.
         transactionObject.setInstalmentTransaction(InstalmentTransactionEnum.getAt(installmentsSpinner.getSelectedItemPosition()));
 
@@ -88,9 +104,8 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
             default:
                 transactionType = TypeOfTransactionEnum.CREDIT;
         }
-        // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
-        // ITK, pois ele gera um valor unico. Contudo, caso seja
-        // necessario, faca conforme a linha abaixo.
+
+//        Defina o ITK da sua transação
 //        transactionObject.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
 
         transactionObject.setTypeOfTransaction(transactionType);
@@ -104,17 +119,20 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
 //        transactionObject.setSubMerchantAddress("address");]
 
         transactionProvider = buildTransactionProvider();
+        transactionProvider.useDefaultUI(true);
         transactionProvider.setConnectionCallback(this);
         transactionProvider.execute();
     }
 
-    @Override
-    public void onStatusChanged(Action action) {
-
-
+    protected String getAuthorizationMessage() {
+        return transactionProvider.getMessageFromAuthorize();
     }
 
     protected abstract T buildTransactionProvider();
+
+    protected boolean providerHasErrorEnum(ErrorsEnum errorsEnum) {
+        return transactionProvider.theListHasError(errorsEnum);
+    }
 
     @Override
     public void onError() {
@@ -126,4 +144,13 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
         });
     }
 
+    @Override
+    public void onStatusChanged(final Action action) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                logTextView.append(action.name() + "\n");
+            }
+        });
+    }
 }

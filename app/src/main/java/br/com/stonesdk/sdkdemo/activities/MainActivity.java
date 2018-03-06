@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
-import stone.cache.ApplicationCache;
 import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
 import stone.providers.LoadTablesProvider;
@@ -45,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 "Mostrar Mensagem no pinpad",
                 "Cancelar transações com erro",
                 "Desativar",
-                "Desconectar com um pinpad"
+                "Desconectar com um pinpad",
+                "POS Android"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, options);
@@ -169,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     Toast.makeText(this, "Nenhum device Conectado", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case 8:
+                startActivity(new Intent(MainActivity.this, PosAndroidActivity.class));
             default:
                 break;
         }
