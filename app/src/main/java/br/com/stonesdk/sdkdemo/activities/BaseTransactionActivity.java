@@ -21,6 +21,8 @@ import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
 import stone.database.transaction.TransactionObject;
 import stone.providers.BaseTransactionProvider;
+import stone.user.UserModel;
+import stone.utils.Stone;
 
 /**
  * Created by felipe on 05/03/18.
@@ -31,6 +33,7 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
     protected final TransactionObject transactionObject = new TransactionObject();
     RadioGroup transactionTypeRadioGroup;
     Spinner installmentsSpinner;
+    Spinner stoneCodeSpinner;
     TextView installmentsTextView;
     CheckBox captureTransactionCheckBox;
     EditText amountEditText;
@@ -44,7 +47,7 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
 
         transactionTypeRadioGroup = findViewById(R.id.transactionTypeRadioGroup);
         installmentsSpinner = findViewById(R.id.installmentsSpinner);
-        installmentsTextView = findViewById(R.id.installmentsTextView);
+        stoneCodeSpinner = findViewById(R.id.stoneCodeSpinner);
         captureTransactionCheckBox = findViewById(R.id.captureTransactionCheckBox);
         amountEditText = findViewById(R.id.amountEditText);
         logTextView = findViewById(R.id.logTextView);
@@ -83,6 +86,13 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.installments_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         installmentsSpinner.setAdapter(adapter);
+
+        ArrayAdapter<String> stoneCodeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        stoneCodeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for (UserModel userModel : Stone.sessionApplication.getUserModelList()) {
+            stoneCodeAdapter.add(userModel.getStoneCode());
+        }
+        stoneCodeSpinner.setAdapter(stoneCodeAdapter);
     }
 
     public void initTransaction() {
@@ -152,5 +162,9 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
                 logTextView.append(action.name() + "\n");
             }
         });
+    }
+
+    protected UserModel getSelectedUserModel() {
+        return Stone.getUserModel(stoneCodeSpinner.getSelectedItemPosition());
     }
 }

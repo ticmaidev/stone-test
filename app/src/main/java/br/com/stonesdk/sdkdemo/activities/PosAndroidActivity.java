@@ -9,13 +9,12 @@ import br.com.stone.posandroid.providers.PosTransactionProvider;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.interfaces.StoneCallbackInterface;
-import stone.utils.Stone;
 
 public class PosAndroidActivity extends BaseTransactionActivity<PosTransactionProvider> {
 
     @Override
     protected PosTransactionProvider buildTransactionProvider() {
-        return new PosTransactionProvider(this, transactionObject, Stone.getUserModel(0));
+        return new PosTransactionProvider(this, transactionObject, getSelectedUserModel());
     }
 
     @Override

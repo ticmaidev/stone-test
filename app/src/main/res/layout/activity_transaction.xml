@@ -42,8 +42,17 @@
         android:id="@+id/installmentsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Stone Code"
+        app:layout_constraintStart_toStartOf="@+id/stoneCodeSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTypeRadioGroup" />
+
+    <TextView
+        android:id="@+id/installmentsTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/transaction_no_installments"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transactionTypeRadioGroup" />
@@ -52,10 +61,10 @@
         android:id="@+id/installmentsSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/stoneCodeSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/installmentsTextView" />
 
@@ -128,10 +137,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:checked="true"
         android:text="Transação com Captura"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/installmentsSpinner" />
+
+    <Spinner
+        android:id="@+id/stoneCodeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/installmentsSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/installmentsTextView" />
 
 </android.support.constraint.ConstraintLayout>

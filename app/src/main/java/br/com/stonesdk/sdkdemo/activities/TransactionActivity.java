@@ -13,7 +13,7 @@ public class TransactionActivity extends BaseTransactionActivity<TransactionProv
 
     @Override
     protected TransactionProvider buildTransactionProvider() {
-        return new TransactionProvider(TransactionActivity.this, transactionObject, Stone.getUserModel(0), Stone.getPinpadFromListAt(0));
+        return new TransactionProvider(TransactionActivity.this, transactionObject, getSelectedUserModel(), Stone.getPinpadFromListAt(0));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TransactionActivity extends BaseTransactionActivity<TransactionProv
     }
 
     @Override
-    public void onError() {
+    public void onError()   {
         super.onError();
         if (providerHasErrorEnum(ErrorsEnum.NEED_LOAD_TABLES)) { // code 20
             LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, Stone.getPinpadFromListAt(0));
