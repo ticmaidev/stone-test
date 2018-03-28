@@ -10,7 +10,7 @@ import stone.application.enums.ErrorsEnum;
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.interfaces.StoneCallbackInterface;
 
-public class PosAndroidActivity extends BaseTransactionActivity<PosTransactionProvider> {
+public class PosTransactionActivity extends BaseTransactionActivity<PosTransactionProvider> {
 
     @Override
     protected PosTransactionProvider buildTransactionProvider() {
@@ -24,16 +24,16 @@ public class PosAndroidActivity extends BaseTransactionActivity<PosTransactionPr
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    final PosPrintProvider posPrintProvider = new PosPrintProvider(PosAndroidActivity.this, transactionObject);
+                    final PosPrintProvider posPrintProvider = new PosPrintProvider(PosTransactionActivity.this, transactionObject);
                     posPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(PosAndroidActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PosTransactionActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError() {
-                            Toast.makeText(PosAndroidActivity.this, "Erro ao imprimir: " + posPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PosTransactionActivity.this, "Erro ao imprimir: " + posPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
