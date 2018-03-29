@@ -41,7 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PosAndroidActivity"></activity>
+        <activity
+            android:name=".activities.PosTransactionActivity"
+            android:label="@string/title_activity_transaction" />
     </application>
 
 </manifest>

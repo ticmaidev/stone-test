@@ -7,11 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
@@ -26,43 +22,31 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static stone.utils.Stone.getPinpadFromListAt;
 
-public class MainActivity extends AppCompatActivity implements OnItemClickListener {
-
-    ListView listView;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        listView = findViewById(R.id.listMainActivity);
-
-        String[] options = new String[]{
-                "Dispositivos pareados",
-                "Fazer uma transação",
-                "Listar transações",
-                "Atualizar Tabelas",
-                "Mostrar Mensagem no pinpad",
-                "Cancelar transações com erro",
-                "Desativar",
-                "Desconectar com um pinpad",
-                "POS Android"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, options);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
+        findViewById(R.id.transactionOption).setOnClickListener(this);
+        findViewById(R.id.loadTablesOption).setOnClickListener(this);
+        findViewById(R.id.posTransactionOption).setOnClickListener(this);
+        findViewById(R.id.pairedDevicesOption).setOnClickListener(this);
+        findViewById(R.id.disconnectDeviceOption).setOnClickListener(this);
+        findViewById(R.id.deactivateOption).setOnClickListener(this);
+        findViewById(R.id.cancelTransactionsOption).setOnClickListener(this);
+        findViewById(R.id.displayMessageOption).setOnClickListener(this);
+        findViewById(R.id.listTransactionOption).setOnClickListener(this);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+    public void onClick(View v) {
         // Para cada nova opção na lista, um novo "case" precisa ser inserido aqui.
-        switch (position) {
-            case 0:
+        switch (v.getId()) {
+            case R.id.pairedDevicesOption:
                 Intent devicesIntent = new Intent(MainActivity.this, DevicesActivity.class);
                 startActivity(devicesIntent);
                 break;
-            case 1:
+            case R.id.transactionOption:
                 // Verifica se o bluetooth esta ligado e se existe algum pinpad conectado.
                 if (Stone.getPinpadListSize() > 0) {
                     Intent transactionIntent = new Intent(MainActivity.this, TransactionActivity.class);
@@ -72,11 +56,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
                 }
-            case 2:
+            case R.id.listTransactionOption:
                 Intent transactionListIntent = new Intent(MainActivity.this, TransactionListActivity.class);
                 startActivity(transactionListIntent);
                 break;
-            case 3:
+            case R.id.loadTablesOption:
                 if (Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
@@ -95,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 });
                 loadTablesProvider.execute();
                 break;
-            case 4:
+            case R.id.displayMessageOption:
                 if (Stone.getPinpadListSize() <= 0) {
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
@@ -123,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
                 builder.show();
                 break;
-            case 5:
+            case R.id.cancelTransactionsOption:
                 final ReversalProvider reversalProvider = new ReversalProvider(this);
                 reversalProvider.useDefaultUI(true);
                 reversalProvider.setDialogMessage("Cancelando transações com erro");
@@ -140,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 });
                 reversalProvider.execute();
                 break;
-            case 6:
+            case R.id.deactivateOption:
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
@@ -161,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     }
                 });
                 provider.deactivate();
-            case 7:
+            case R.id.disconnectDeviceOption:
                 if (Stone.getPinpadListSize() > 0) {
                     Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
                     startActivity(closeBluetoothConnectionIntent);
@@ -169,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     Toast.makeText(this, "Nenhum device Conectado", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case 8:
-                startActivity(new Intent(MainActivity.this, PosAndroidActivity.class));
+            case R.id.posTransactionOption:
+                startActivity(new Intent(MainActivity.this, PosTransactionActivity.class));
             default:
                 break;
         }

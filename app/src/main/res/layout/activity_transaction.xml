@@ -39,7 +39,7 @@
 
 
     <TextView
-        android:id="@+id/installmentsTextView"
+        android:id="@+id/stoneCodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/transactionTypeRadioGroup" />
 
     <TextView
-        android:id="@+id/installmentsTextView2"
+        android:id="@+id/installmentsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toStartOf="@+id/stoneCodeSpinner"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/installmentsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/stoneCodeTextView" />
 
     <Button
         android:id="@+id/sendTransactionButton"
@@ -97,7 +97,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
             android:text="@string/transaction_debit"
             android:textSize="20sp" />
 
@@ -105,6 +104,7 @@
             android:id="@+id/radioCredit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:layout_weight="1"
             android:text="@string/transaction_credit"
             android:textSize="20sp" />
@@ -137,11 +137,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:checked="true"
         android:text="Transação com Captura"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/installmentsSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/stoneCodeSpinner" />
 
     <Spinner
         android:id="@+id/stoneCodeSpinner"
@@ -153,6 +153,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/installmentsSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/installmentsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/stoneCodeTextView" />
 
 </android.support.constraint.ConstraintLayout>

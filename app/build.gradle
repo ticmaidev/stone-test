@@ -30,5 +30,6 @@ dependencies {
     implementation 'br.com.stone:stone-sdk:2.6.0-beta7'
     implementation 'br.com.stone:stone-sdk-posandroid:2.6.0-beta7'
     implementation 'br.com.stone:stone-sdk-posandroid-pax:2.6.0-beta7'
+    implementation 'br.com.stone:stone-sdk-posandroid-nexgo:2.6.0-beta7'
     implementation 'br.com.stone:stone-sdk-posandroid-ingenico:2.6.0-beta7'
 }

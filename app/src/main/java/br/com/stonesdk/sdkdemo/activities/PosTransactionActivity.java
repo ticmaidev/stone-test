@@ -21,6 +21,7 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     public void onSuccess() {
         if (transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Transação aprovada! Deseja imprimir o comprovante?");
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

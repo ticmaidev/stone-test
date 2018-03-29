@@ -44,8 +44,8 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
-
         transactionTypeRadioGroup = findViewById(R.id.transactionTypeRadioGroup);
+        installmentsTextView = findViewById(R.id.installmentsTextView);
         installmentsSpinner = findViewById(R.id.installmentsSpinner);
         stoneCodeSpinner = findViewById(R.id.stoneCodeSpinner);
         captureTransactionCheckBox = findViewById(R.id.captureTransactionCheckBox);
