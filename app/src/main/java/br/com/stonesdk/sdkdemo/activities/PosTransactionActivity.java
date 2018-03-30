@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.widget.Toast;
 
 import br.com.stone.posandroid.providers.PosPrintProvider;
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stone.posandroid.providers.PosTransactionProvider;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.TransactionStatusEnum;
@@ -20,12 +21,13 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     @Override
     public void onSuccess() {
         if (transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Transação aprovada! Deseja imprimir o comprovante?");
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    final PosPrintProvider posPrintProvider = new PosPrintProvider(PosTransactionActivity.this, transactionObject);
+                    final PosPrintReceiptProvider posPrintProvider = new PosPrintReceiptProvider(PosTransactionActivity.this, transactionObject);
                     posPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
                         @Override
                         public void onSuccess() {

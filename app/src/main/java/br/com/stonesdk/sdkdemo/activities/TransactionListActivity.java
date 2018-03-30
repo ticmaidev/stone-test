@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.stone.posandroid.providers.PosPrintProvider;
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stonesdk.sdkdemo.R;
+import stone.application.enums.ReceiptType;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
@@ -58,7 +60,8 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         final TransactionObject selectedTransaction = transactionObjects.get(position);
         ArrayList<String> optionsList = new ArrayList<String>() {{
             add("[Pinpad] Imprimir comprovante");
-            add("[POS] Imprimir comprovante");
+            add("[POS] Imprimir via do estabelecimento");
+            add("[POS] Imprimir via do cliente");
             add("[POS] Imprimir comprovante customizado");
             add("Cancelar");
             add("Enviar via do cliente");
@@ -106,8 +109,9 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 }
                                 break;
                             case 1:
-                                final PosPrintProvider posPrintProvider = new PosPrintProvider(TransactionListActivity.this, selectedTransaction);
-                                posPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
+                                final PosPrintReceiptProvider posPrintMerchantProvider = new PosPrintReceiptProvider(TransactionListActivity.this, selectedTransaction);
+                                posPrintMerchantProvider.setReceiptType(ReceiptType.MERCHANT);
+                                posPrintMerchantProvider.setConnectionCallback(new StoneCallbackInterface() {
                                     @Override
                                     public void onSuccess() {
                                         Toast.makeText(TransactionListActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
@@ -115,12 +119,28 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
 
                                     @Override
                                     public void onError() {
-                                        Toast.makeText(TransactionListActivity.this, "Erro ao imprimir: " + posPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TransactionListActivity.this, "Erro ao imprimir: " + posPrintMerchantProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                posPrintProvider.execute();
+                                posPrintMerchantProvider.execute();
                                 break;
                             case 2:
+                                final PosPrintReceiptProvider posPrintClientProvider = new PosPrintReceiptProvider(TransactionListActivity.this, selectedTransaction);
+                                posPrintClientProvider.setReceiptType(ReceiptType.CLIENT);
+                                posPrintClientProvider.setConnectionCallback(new StoneCallbackInterface() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(TransactionListActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        Toast.makeText(TransactionListActivity.this, "Erro ao imprimir: " + posPrintClientProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                posPrintClientProvider.execute();
+                                break;
+                            case 3:
                                 final PosPrintProvider customPosPrintProvider = new PosPrintProvider(TransactionListActivity.this);
                                 customPosPrintProvider.addLine("PAN : " + selectedTransaction.getCardHolderNumber());
                                 customPosPrintProvider.addLine("DATE/TIME : " + selectedTransaction.getDate() + " " + selectedTransaction.getTime());
@@ -141,7 +161,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 });
                                 customPosPrintProvider.execute();
                                 break;
-                            case 3:
+                            case 4:
                                 final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction);
                                 cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
                                 cancellationProvider.setDialogMessage("Cancelando...");
@@ -157,13 +177,13 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 });
                                 cancellationProvider.execute();
                                 break;
-                            case 4:
+                            case 5:
                                 sendReceipt(selectedTransaction, false);
                                 break;
-                            case 5:
+                            case 6:
                                 sendReceipt(selectedTransaction, true);
                                 break;
-                            case 6:
+                            case 7:
                                 final CaptureTransactionProvider provider = new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
                                 provider.useDefaultUI(true);
                                 provider.setDialogMessage("Efetuando Captura...");
