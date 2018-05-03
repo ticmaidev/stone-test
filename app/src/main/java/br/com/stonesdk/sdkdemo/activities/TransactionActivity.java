@@ -129,21 +129,6 @@ public class TransactionActivity extends AppCompatActivity {
 
                     public void onError() {
                         Toast.makeText(getApplicationContext(), "Erro na transação", Toast.LENGTH_SHORT).show();
-                        if (provider.theListHasError(ErrorsEnum.NEED_LOAD_TABLES)) { // code 20
-                            LoadTablesProvider loadTablesProvider = new LoadTablesProvider(TransactionActivity.this, Stone.getPinpadFromListAt(0), Stone.getUserModel(0));
-                            loadTablesProvider.setDialogMessage("Subindo as tabelas");
-                            loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-                            loadTablesProvider.execute();
-                            loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
-                                public void onSuccess() {
-                                    sendButton.performClick(); // simula um clique no botao de enviar transacao para reenviar a transacao.
-                                }
-
-                                public void onError() {
-                                    Toast.makeText(getApplicationContext(), "Sucesso.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
                     }
                 });
                 provider.execute();

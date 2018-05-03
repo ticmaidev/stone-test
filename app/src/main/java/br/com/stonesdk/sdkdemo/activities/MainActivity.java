@@ -16,17 +16,13 @@ import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.interfaces.StoneCallbackInterface;
-import stone.cache.ApplicationCache;
 import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
-import stone.providers.DownloadTablesProvider;
-import stone.providers.LoadTablesProvider;
 import stone.providers.ReversalProvider;
 import stone.utils.Stone;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static stone.utils.Stone.getPinpadFromListAt;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -42,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 "Dispositivos pareados",
                 "Fazer uma transação",
                 "Listar transações",
-                "Atualizar Tabelas",
                 "Mostrar Mensagem no pinpad",
                 "Cancelar transações com erro",
                 "Desativar",
@@ -82,25 +77,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
                     break;
                 }
-                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, getPinpadFromListAt(0), Stone.getUserModel(0));
-                loadTablesProvider.setDialogMessage("Subindo as tabelas");
-                loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-                loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
-                    public void onSuccess() {
-                        makeText(getApplicationContext(), "Sucesso.", LENGTH_SHORT).show();
-                    }
-
-                    public void onError() {
-                        makeText(getApplicationContext(), "Erro.", LENGTH_SHORT).show();
-                    }
-                });
-                loadTablesProvider.execute();
-                break;
-            case 4:
-                if (Stone.getPinpadListSize() <= 0) {
-                    makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
-                    break;
-                }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Digite a mensagem para mostrar no pinpad");
@@ -124,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
                 builder.show();
                 break;
-            case 5:
+            case 4:
                 final ReversalProvider reversalProvider = new ReversalProvider(this);
                 reversalProvider.useDefaultUI(true);
                 reversalProvider.setDialogMessage("Cancelando transações com erro");
@@ -141,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 });
                 reversalProvider.execute();
                 break;
-            case 6:
+            case 5:
                 final ActiveApplicationProvider provider = new ActiveApplicationProvider(MainActivity.this);
                 provider.setDialogMessage("Desativando o aplicativo...");
                 provider.setDialogTitle("Aguarde");
@@ -157,12 +133,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                     /* metodo chamado caso ocorra alguma excecao */
                     public void onError() {
                         makeText(MainActivity.this, "Erro na ativacao do aplicativo, verifique a lista de erros do provider", LENGTH_SHORT).show();
-                         /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
+                        /* Chame o metodo abaixo para verificar a lista de erros. Para mais detalhes, leia a documentacao: */
                         Log.e("MainActivity", "onError: " + provider.getListOfErrors().toString());
                     }
                 });
                 provider.deactivate();
-            case 7:
+            case 6:
                 if (Stone.getPinpadListSize() > 0) {
                     Intent closeBluetoothConnectionIntent = new Intent(MainActivity.this, DisconnectPinpadActivity.class);
                     startActivity(closeBluetoothConnectionIntent);
@@ -172,32 +148,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // IMPORTANTE: Mantenha esse provider na sua MAIN, pois ele ira baixar as
-        // tabelas AIDs e CAPKs dos servidores da Stone e sera utilizada quando necessário.
-        ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
-        if (!applicationCache.checkIfHasTables(Stone.getUserModel(0).getTableVersion())) {
-
-            // Realiza processo de download das tabelas em sua totalidade.
-            DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(MainActivity.this, Stone.getUserModel(0));
-            downloadTablesProvider.setDialogMessage("Baixando as tabelas, por favor aguarde");
-            downloadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-            downloadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
-                public void onSuccess() {
-                    makeText(getApplicationContext(), "Tabelas baixadas com sucesso", LENGTH_SHORT).show();
-                }
-
-                public void onError() {
-                    makeText(getApplicationContext(), "Erro no download das tabelas", LENGTH_SHORT).show();
-                }
-            });
-            downloadTablesProvider.execute();
         }
     }
 }
