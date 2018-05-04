@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 
 
@@ -14,9 +14,11 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url "https://packagecloud.io/stone/sdk-android/maven2" }
-//        maven { url "https://packagecloud.io/stone/sdk-android-snapshot/maven2" }
+        maven { url "https://packagecloud.io/stone/sdk-android-snapshot/maven2" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
     }
 }
