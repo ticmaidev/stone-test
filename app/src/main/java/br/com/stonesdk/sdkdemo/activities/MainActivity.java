@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import br.com.stone.posandroid.providers.PosValidationTransactionByCardProvider;
+import br.com.stone.posandroid.providers.PosValidateTransactionByCardProvider;
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.enums.Action;
 import stone.application.interfaces.StoneActionCallback;
@@ -20,13 +20,11 @@ import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionObject;
 import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
-import stone.providers.LoadTablesProvider;
 import stone.providers.ReversalProvider;
 import stone.utils.Stone;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static stone.utils.Stone.getPinpadFromListAt;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.transactionOption).setOnClickListener(this);
-        findViewById(R.id.loadTablesOption).setOnClickListener(this);
         findViewById(R.id.posTransactionOption).setOnClickListener(this);
         findViewById(R.id.pairedDevicesOption).setOnClickListener(this);
         findViewById(R.id.disconnectDeviceOption).setOnClickListener(this);
@@ -70,26 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.listTransactionOption:
                 Intent transactionListIntent = new Intent(MainActivity.this, TransactionListActivity.class);
                 startActivity(transactionListIntent);
-                break;
-
-            case R.id.loadTablesOption:
-                if (Stone.getPinpadListSize() <= 0) {
-                    makeText(getApplicationContext(), "Conecte-se a um pinpad.", LENGTH_SHORT).show();
-                    break;
-                }
-                LoadTablesProvider loadTablesProvider = new LoadTablesProvider(MainActivity.this, getPinpadFromListAt(0));
-                loadTablesProvider.setDialogMessage("Subindo as tabelas");
-                loadTablesProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
-                loadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
-                    public void onSuccess() {
-                        makeText(getApplicationContext(), "Sucesso.", LENGTH_SHORT).show();
-                    }
-
-                    public void onError() {
-                        makeText(getApplicationContext(), "Erro.", LENGTH_SHORT).show();
-                    }
-                });
-                loadTablesProvider.execute();
                 break;
 
             case R.id.displayMessageOption:
@@ -180,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.posValidateCardOption:
-                final PosValidationTransactionByCardProvider posValidationTransactionByCardProvider = new PosValidationTransactionByCardProvider(this);
-                posValidationTransactionByCardProvider.setConnectionCallback(new StoneActionCallback() {
+                final PosValidateTransactionByCardProvider posValidateTransactionByCardProvider = new PosValidateTransactionByCardProvider(this);
+                posValidateTransactionByCardProvider.setConnectionCallback(new StoneActionCallback() {
                     @Override
                     public void onStatusChanged(final Action action) {
                         runOnUiThread(new Runnable() {
@@ -197,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                final List<TransactionObject> transactionsWithCurrentCard = posValidationTransactionByCardProvider.getTransactionsWithCurrentCard();
+                                final List<TransactionObject> transactionsWithCurrentCard = posValidateTransactionByCardProvider.getTransactionsWithCurrentCard();
                                 if (transactionsWithCurrentCard.isEmpty())
                                     Toast.makeText(MainActivity.this, "Cartão não fez transação.", Toast.LENGTH_SHORT).show();
                                 Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
@@ -213,13 +190,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void run() {
                                 Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                Log.e("posValidateCardOption", "onError: " + posValidationTransactionByCardProvider.getListOfErrors());
+                                Log.e("posValidateCardOption", "onError: " + posValidateTransactionByCardProvider.getListOfErrors());
                             }
                         });
                     }
 
                 });
-                posValidationTransactionByCardProvider.execute();
+                posValidateTransactionByCardProvider.execute();
                 break;
 
             default:
