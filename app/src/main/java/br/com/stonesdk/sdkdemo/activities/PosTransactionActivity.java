@@ -4,12 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
-import br.com.stone.posandroid.providers.PosPrintProvider;
-import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stone.posandroid.providers.PosTransactionProvider;
+import br.com.stonesdk.sdkdemo.controller.PrintController;
 import stone.application.enums.ErrorsEnum;
+import stone.application.enums.ReceiptType;
 import stone.application.enums.TransactionStatusEnum;
-import stone.application.interfaces.StoneCallbackInterface;
 
 public class PosTransactionActivity extends BaseTransactionActivity<PosTransactionProvider> {
 
@@ -22,29 +21,32 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     public void onSuccess() {
         if (transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
 
+            final PrintController printController = new PrintController(
+                    PosTransactionActivity.this,
+                    transactionObject
+            );
+
+            printController.print(ReceiptType.MERCHANT);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Transação aprovada! Deseja imprimir o comprovante?");
+            builder.setTitle("Transação aprovada! Deseja imprimir a via do cliente?");
+
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    final PosPrintReceiptProvider posPrintProvider = new PosPrintReceiptProvider(PosTransactionActivity.this, transactionObject);
-                    posPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(PosTransactionActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onError() {
-                            Toast.makeText(PosTransactionActivity.this, "Erro ao imprimir: " + posPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    printController.print(ReceiptType.CLIENT);
                 }
             });
+
             builder.setNegativeButton(android.R.string.no, null);
             builder.show();
+
         } else {
-            Toast.makeText(getApplicationContext(), "Erro na transação: \"" + getAuthorizationMessage() + "\"", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Erro na transação: \"" + getAuthorizationMessage() + "\"",
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 
@@ -52,7 +54,11 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     public void onError() {
         super.onError();
         if (providerHasErrorEnum(ErrorsEnum.DEVICE_NOT_COMPATIBLE)) {
-            Toast.makeText(this, "Dispositivo não compatível ou dependência relacionada não está presente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    "Dispositivo não compatível ou dependência relacionada não está presente",
+                    Toast.LENGTH_SHORT
+            ).show();
         }
     }
 }
