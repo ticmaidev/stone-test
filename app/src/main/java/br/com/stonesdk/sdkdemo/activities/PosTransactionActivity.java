@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import br.com.stone.posandroid.providers.PosTransactionProvider;
 import br.com.stonesdk.sdkdemo.controller.PrintController;
+import stone.application.enums.Action;
 import stone.application.enums.ErrorsEnum;
 import stone.application.enums.ReceiptType;
 import stone.application.enums.TransactionStatusEnum;
@@ -61,4 +62,18 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
             ).show();
         }
     }
+
+    @Override
+    public void onStatusChanged(final Action action) {
+        super.onStatusChanged(action);
+        switch (action) {
+            case TRANSACTION_WAITING_PASSWORD:
+                Toast.makeText(
+                        this,
+                        "Pin tries remaining to block card: ${transactionProvider?.remainingPinTries}",
+                        Toast.LENGTH_LONG
+                ).show();
+        }
+    }
+
 }
