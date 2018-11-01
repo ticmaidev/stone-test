@@ -73,6 +73,9 @@ public class ValidationActivity extends AppCompatActivity implements View.OnClic
             }
         });
         environmentSpinner.setAdapter(adapter);
+
+        Stone.setAppName("Demo SDK");
+
     }
 
     @Override
