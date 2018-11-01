@@ -16,17 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.stone.posandroid.providers.PosPrintProvider;
-import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stonesdk.sdkdemo.R;
+import br.com.stonesdk.sdkdemo.controller.PrintController;
 import stone.application.enums.ReceiptType;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
-import stone.email.pombo.Contact;
 import stone.providers.CancellationProvider;
 import stone.providers.CaptureTransactionProvider;
 import stone.providers.PrintProvider;
 import stone.providers.SendEmailTransactionProvider;
+import stone.repository.remote.email.pombo.email.Contact;
 import stone.utils.PrintObject;
 import stone.utils.Stone;
 
@@ -79,6 +79,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
+
                             case 0:
                                 try {
                                     // lógica da impressão
@@ -108,38 +109,13 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                     e.printStackTrace();
                                 }
                                 break;
+
                             case 1:
-                                final PosPrintReceiptProvider posPrintMerchantProvider = new PosPrintReceiptProvider(TransactionListActivity.this, selectedTransaction);
-                                posPrintMerchantProvider.setReceiptType(ReceiptType.MERCHANT);
-                                posPrintMerchantProvider.setConnectionCallback(new StoneCallbackInterface() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(TransactionListActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
-                                    }
+                                printReceipt(ReceiptType.MERCHANT, selectedTransaction);
 
-                                    @Override
-                                    public void onError() {
-                                        Toast.makeText(TransactionListActivity.this, "Erro ao imprimir: " + posPrintMerchantProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                posPrintMerchantProvider.execute();
-                                break;
                             case 2:
-                                final PosPrintReceiptProvider posPrintClientProvider = new PosPrintReceiptProvider(TransactionListActivity.this, selectedTransaction);
-                                posPrintClientProvider.setReceiptType(ReceiptType.CLIENT);
-                                posPrintClientProvider.setConnectionCallback(new StoneCallbackInterface() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(TransactionListActivity.this, "Recibo impresso", Toast.LENGTH_SHORT).show();
-                                    }
+                                printReceipt(ReceiptType.MERCHANT, selectedTransaction);
 
-                                    @Override
-                                    public void onError() {
-                                        Toast.makeText(TransactionListActivity.this, "Erro ao imprimir: " + posPrintClientProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                posPrintClientProvider.execute();
-                                break;
                             case 3:
                                 final PosPrintProvider customPosPrintProvider = new PosPrintProvider(TransactionListActivity.this);
                                 customPosPrintProvider.addLine("PAN : " + selectedTransaction.getCardHolderNumber());
@@ -161,6 +137,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 });
                                 customPosPrintProvider.execute();
                                 break;
+
                             case 4:
                                 final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction);
                                 cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
@@ -178,10 +155,10 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 cancellationProvider.execute();
                                 break;
                             case 5:
-                                sendReceipt(selectedTransaction, false);
+                                sendReceipt(selectedTransaction, ReceiptType.CLIENT);
                                 break;
                             case 6:
-                                sendReceipt(selectedTransaction, true);
+                                sendReceipt(selectedTransaction, ReceiptType.MERCHANT);
                                 break;
                             case 7:
                                 final CaptureTransactionProvider provider = new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
@@ -207,10 +184,10 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         builder.show();
     }
 
-    private void sendReceipt(TransactionObject selectedTransaction, boolean merchantReceipt) {
-        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
+    private void sendReceipt(TransactionObject selectedTransaction, ReceiptType receiptType) {
+        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, selectedTransaction);
         sendEmailProvider.useDefaultUI(false);
-        sendEmailProvider.setMerchantReceipt(merchantReceipt);
+        sendEmailProvider.setReceiptType(receiptType);
         sendEmailProvider.addTo(new Contact("cliente@gmail.com", "Nome do Cliente"));
         sendEmailProvider.setFrom(new Contact("loja@gmail.com", "Nome do Estabelecimento"));
         sendEmailProvider.setDialogMessage("Enviando comprovante");
@@ -224,5 +201,12 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
             }
         });
         sendEmailProvider.execute();
+    }
+
+    private void printReceipt(ReceiptType receiptType, TransactionObject transactionObject) {
+        new PrintController(
+                TransactionListActivity.this,
+                transactionObject
+        ).print(receiptType);
     }
 }
