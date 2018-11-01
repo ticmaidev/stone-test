@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.stonesdk.sdkdemo.R;
+import stone.application.enums.ReceiptType;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
-import stone.email.pombo.Contact;
 import stone.providers.CancellationProvider;
 import stone.providers.CaptureTransactionProvider;
 import stone.providers.PrintProvider;
 import stone.providers.SendEmailTransactionProvider;
+import stone.repository.remote.email.pombo.email.Contact;
 import stone.utils.PrintObject;
 import stone.utils.Stone;
 
@@ -118,10 +119,10 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 cancellationProvider.execute();
                                 break;
                             case 2:
-                                sendReceipt(selectedTransaction, false);
+                                sendReceipt(selectedTransaction, ReceiptType.CLIENT);
                                 break;
                             case 3:
-                                sendReceipt(selectedTransaction, true);
+                                sendReceipt(selectedTransaction, ReceiptType.MERCHANT);
                                 break;
                             case 4:
                                 final CaptureTransactionProvider provider = new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
@@ -147,10 +148,14 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         builder.show();
     }
 
-    private void sendReceipt(TransactionObject selectedTransaction, boolean merchantReceipt) {
-        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(TransactionListActivity.this, Stone.getUserModel(0), selectedTransaction);
+    private void sendReceipt(TransactionObject selectedTransaction, ReceiptType receiptType) {
+        SendEmailTransactionProvider sendEmailProvider = new SendEmailTransactionProvider(
+                TransactionListActivity.this,
+                selectedTransaction,
+                receiptType
+        );
+
         sendEmailProvider.useDefaultUI(false);
-        sendEmailProvider.setMerchantReceipt(merchantReceipt);
         sendEmailProvider.addTo(new Contact("cliente@gmail.com", "Nome do Cliente"));
         sendEmailProvider.setFrom(new Contact("loja@gmail.com", "Nome do Estabelecimento"));
         sendEmailProvider.setDialogMessage("Enviando comprovante");
