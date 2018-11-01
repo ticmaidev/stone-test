@@ -19,16 +19,13 @@ import android.widget.Toast;
 
 import br.com.stonesdk.sdkdemo.R;
 import stone.application.enums.Action;
-import stone.application.enums.ErrorsEnum;
 import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
-import stone.application.interfaces.StoneCallbackInterface;
-import stone.providers.LoadTablesProvider;
+import stone.database.transaction.TransactionObject;
 import stone.providers.TransactionProvider;
 import stone.utils.Stone;
-import stone.utils.StoneTransaction;
 
 public class TransactionActivity extends AppCompatActivity {
 
@@ -79,35 +76,49 @@ public class TransactionActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
-                // Cria o objeto de transacao. Usar o "Stone.getPinpadFromListAt"
-                // significa que devera estar conectado com ao menos um pinpad, pois o metodo
-                // cria uma lista de conectados e conecta com quem estiver na posicao "0".
-                StoneTransaction stoneTransaction = new StoneTransaction(Stone.getPinpadFromListAt(0));
+                // Cria o objeto de transacao.
+                TransactionObject transactionObject = new TransactionObject();
 
                 // A seguir deve-se popular o objeto.
-                stoneTransaction.setAmount(valueEditText.getText().toString());
-                stoneTransaction.setEmailClient(null);
-                stoneTransaction.setUserModel(Stone.getUserModel(0));
-                stoneTransaction.setSignature(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
-                stoneTransaction.setCapture(captureTransactionCheckBox.isChecked());
+                transactionObject.setAmount(valueEditText.getText().toString());
+                transactionObject.setUserModel(Stone.getUserModel(0));
+                transactionObject.setSignature(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
+                transactionObject.setCapture(captureTransactionCheckBox.isChecked());
+
+                transactionObject.setSubMerchantCity("city"); //Cidade do sub-merchant
+                transactionObject.setSubMerchantPostalAddress("00000000"); //CEP do sub-merchant (Apenas números)
+                transactionObject.setSubMerchantRegisteredIdentifier("00000000"); // Identificador do sub-merchant
+                transactionObject.setSubMerchantTaxIdentificationNumber("33368443000199"); // CNPJ do sub-merchant (apenas números)
+
+                //        Seleciona o mcc do lojista.
+                transactionObject.setSubMerchantCategoryCode("123");
+
+                //        Seleciona o endereço do lojista.
+                transactionObject.setSubMerchantAddress("address");
 
                 // AVISO IMPORTANTE: Nao e recomendado alterar o campo abaixo do
                 // ITK, pois ele gera um valor unico. Contudo, caso seja
                 // necessario, faca conforme a linha abaixo.
-//                stoneTransaction.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
+//                transactionObject.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
 
                 // Informa a quantidade de parcelas.
-                stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.getAt(instalmentsSpinner.getSelectedItemPosition()));
+                transactionObject.setInstalmentTransaction(InstalmentTransactionEnum.getAt(instalmentsSpinner.getSelectedItemPosition()));
 
                 // Verifica a forma de pagamento selecionada.
                 if (debitRadioButton.isChecked()) {
-                    stoneTransaction.setTypeOfTransaction(TypeOfTransactionEnum.DEBIT);
+                    transactionObject.setTypeOfTransaction(TypeOfTransactionEnum.DEBIT);
                 } else {
-                    stoneTransaction.setTypeOfTransaction(TypeOfTransactionEnum.CREDIT);
+                    transactionObject.setTypeOfTransaction(TypeOfTransactionEnum.CREDIT);
                 }
 
                 // Processo para envio da transacao.
-                final TransactionProvider provider = new TransactionProvider(TransactionActivity.this, stoneTransaction, Stone.getPinpadFromListAt(0));
+                final TransactionProvider provider = new TransactionProvider(
+                        TransactionActivity.this,
+                        transactionObject,
+                        Stone.getUserModel(0),
+                        Stone.getPinpadFromListAt(0)
+                );
+
                 provider.useDefaultUI(false);
                 provider.setDialogMessage("Enviando..");
                 provider.setDialogTitle("Aguarde");
