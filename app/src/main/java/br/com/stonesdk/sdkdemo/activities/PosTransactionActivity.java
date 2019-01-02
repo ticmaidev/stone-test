@@ -2,6 +2,9 @@ package br.com.stonesdk.sdkdemo.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import br.com.stone.posandroid.providers.PosTransactionProvider;
@@ -29,7 +32,7 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
 
             printController.print(ReceiptType.MERCHANT);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Transação aprovada! Deseja imprimir a via do cliente?");
 
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -40,14 +43,27 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
             });
 
             builder.setNegativeButton(android.R.string.no, null);
-            builder.show();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    builder.show();
+
+                }
+            });
+
 
         } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Erro na transação: \"" + getAuthorizationMessage() + "\"",
-                    Toast.LENGTH_LONG
-            ).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Erro na transação: \"" + getAuthorizationMessage() + "\"",
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            });
         }
     }
 
@@ -66,14 +82,20 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     @Override
     public void onStatusChanged(final Action action) {
         super.onStatusChanged(action);
-        switch (action) {
-            case TRANSACTION_WAITING_PASSWORD:
-                Toast.makeText(
-                        this,
-                        "Pin tries remaining to block card: ${transactionProvider?.remainingPinTries}",
-                        Toast.LENGTH_LONG
-                ).show();
-        }
-    }
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (action) {
+
+                    case TRANSACTION_WAITING_PASSWORD:
+                        Toast.makeText(
+                                PosTransactionActivity.this,
+                                "Pin tries remaining to block card: ${transactionProvider?.remainingPinTries}",
+                                Toast.LENGTH_LONG
+                        ).show();
+                }
+            }
+        });
+    }
 }
