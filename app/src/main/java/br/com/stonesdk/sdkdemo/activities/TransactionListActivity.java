@@ -46,9 +46,12 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
         // exibe todas as transações (neste caso valor e status) para o usuario
         String[] rowOfList = new String[transactionObjects.size()];
         for (int i = 0; i < transactionObjects.size(); i++) {
-            rowOfList[i] = String.format("%s=%s\n%s", transactionObjects.get(i).getIdFromBase(), transactionObjects.get(i).getAmount(), transactionObjects.get(i).getTransactionStatus());
+            rowOfList[i] = String.format("%s=%s\n%s", transactionObjects.get(i).getIdFromBase(),
+                    transactionObjects.get(i).getAmount(),
+                    transactionObjects.get(i).getTransactionStatus());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, rowOfList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, rowOfList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
     }
@@ -78,42 +81,58 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                     // lógica da impressão
                                     List<PrintObject> listToPrint = new ArrayList<>();
                                     for (int i = 0; i < 10; i++) {
-                                        listToPrint.add(new PrintObject("Teste de impressão linha " + i, PrintObject.MEDIUM, PrintObject.CENTER));
+                                        listToPrint.add(new PrintObject("Teste de impressão linha" +
+                                                " " + i, PrintObject.MEDIUM, PrintObject.CENTER));
                                     }
-                                    // Stone.getPinpadFromListAt(0) eh o pinpad conectado, que esta na posicao zero.
-                                    final PrintProvider printProvider = new PrintProvider(TransactionListActivity.this, listToPrint, Stone.getPinpadFromListAt(0));
+                                    // Stone.getPinpadFromListAt(0) eh o pinpad conectado, que
+                                    // esta na posicao zero.
+                                    final PrintProvider printProvider =
+                                            new PrintProvider(TransactionListActivity.this,
+                                                    listToPrint, Stone.getPinpadFromListAt(0));
                                     printProvider.useDefaultUI(false);
                                     printProvider.setDialogMessage("Imprimindo...");
                                     printProvider.setConnectionCallback(new StoneCallbackInterface() {
                                         public void onSuccess() {
-                                            Toast.makeText(getApplicationContext(), "Impressão realizada com sucesso", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Impressão " +
+                                                    "realizada com sucesso", Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
 
                                         public void onError() {
-                                            Toast.makeText(getApplicationContext(), "Um erro ocorreu durante a impressão", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Um erro " +
+                                                    "ocorreu durante a impressão",
+                                                    Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                     printProvider.execute();
                                 } catch (IndexOutOfBoundsException outException) {
-                                    Toast.makeText(getApplicationContext(), "Conecte-se a um pinpad.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Conecte-se a um " +
+                                            "pinpad.", Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Houve um erro inesperado. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Houve um erro " +
+                                            "inesperado. Tente novamente mais tarde.",
+                                            Toast.LENGTH_SHORT).show();
                                     e.printStackTrace();
                                 }
                                 break;
                             case 1:
-                                final CancellationProvider cancellationProvider = new CancellationProvider(TransactionListActivity.this, selectedTransaction);
-                                cancellationProvider.useDefaultUI(false); // para dar feedback ao usuario ou nao.
+                                final CancellationProvider cancellationProvider =
+                                        new CancellationProvider(TransactionListActivity.this,
+                                                selectedTransaction);
+                                cancellationProvider.useDefaultUI(false); // para dar feedback ao
+                                // usuario ou nao.
                                 cancellationProvider.setDialogMessage("Cancelando...");
                                 cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
                                     public void onSuccess() {
-                                        Toast.makeText(getApplicationContext(), cancellationProvider.getMessageFromAuthorize(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),
+                                                cancellationProvider.getMessageFromAuthorize(),
+                                                Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
 
                                     public void onError() {
-                                        Toast.makeText(getApplicationContext(), "Um erro ocorreu durante o cancelamento com a transacao de id: " + selectedTransaction.getIdFromBase(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Um erro ocorreu " +
+                                                "durante o cancelamento com a transacao de id: " + selectedTransaction.getIdFromBase(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 cancellationProvider.execute();
@@ -125,21 +144,26 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 sendReceipt(selectedTransaction, ReceiptType.MERCHANT);
                                 break;
                             case 4:
-                                final CaptureTransactionProvider provider = new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
+                                final CaptureTransactionProvider provider =
+                                        new CaptureTransactionProvider(TransactionListActivity.this, selectedTransaction);
                                 provider.useDefaultUI(true);
                                 provider.setDialogMessage("Efetuando Captura...");
                                 provider.setConnectionCallback(new StoneCallbackInterface() {
                                     @Override
                                     public void onSuccess() {
-                                        Toast.makeText(TransactionListActivity.this, "Transação Capturada com sucesso!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TransactionListActivity.this, "Transação " +
+                                                "Capturada com sucesso!", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
                                     public void onError() {
-                                        Toast.makeText(TransactionListActivity.this, "Ocorreu um erro captura da transacao: " + provider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TransactionListActivity.this, "Ocorreu um " +
+                                                "erro captura da transacao: " + provider.getListOfErrors(), Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
+
+                                provider.execute();
                                 break;
                         }
                     }
