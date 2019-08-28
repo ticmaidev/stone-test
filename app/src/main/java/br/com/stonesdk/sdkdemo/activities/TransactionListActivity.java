@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.stone.posandroid.providers.PosPrintProvider;
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stonesdk.sdkdemo.R;
 import br.com.stonesdk.sdkdemo.controller.PrintController;
 import stone.application.enums.ReceiptType;
@@ -206,9 +207,8 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
     }
 
     private void printReceipt(ReceiptType receiptType, TransactionObject transactionObject) {
-        new PrintController(
-                TransactionListActivity.this,
-                transactionObject
-        ).print(receiptType);
+        new PrintController(getApplicationContext(),
+                new PosPrintReceiptProvider(getApplicationContext(),
+                        transactionObject, receiptType)).print();
     }
 }

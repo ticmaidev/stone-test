@@ -2,11 +2,9 @@ package br.com.stonesdk.sdkdemo.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stone.posandroid.providers.PosTransactionProvider;
 import br.com.stonesdk.sdkdemo.controller.PrintController;
 import stone.application.enums.Action;
@@ -25,12 +23,12 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
     public void onSuccess() {
         if (transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
 
-            final PrintController printController = new PrintController(
-                    PosTransactionActivity.this,
-                    transactionObject
-            );
+            final PrintController printMerchant =
+                    new PrintController(PosTransactionActivity.this,
+                            new PosPrintReceiptProvider(this.getApplicationContext(),
+                                    transactionObject, ReceiptType.MERCHANT));
 
-            printController.print(ReceiptType.MERCHANT);
+            printMerchant.print();
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Transação aprovada! Deseja imprimir a via do cliente?");
@@ -38,7 +36,11 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    printController.print(ReceiptType.CLIENT);
+                    final PrintController printClient =
+                    new PrintController(PosTransactionActivity.this,
+                            new PosPrintReceiptProvider(getApplicationContext(),
+                                    transactionObject, ReceiptType.CLIENT));
+                    printClient.print();
                 }
             });
 
@@ -86,14 +88,12 @@ public class PosTransactionActivity extends BaseTransactionActivity<PosTransacti
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                switch (action) {
-
-                    case TRANSACTION_WAITING_PASSWORD:
-                        Toast.makeText(
-                                PosTransactionActivity.this,
-                                "Pin tries remaining to block card: ${transactionProvider?.remainingPinTries}",
-                                Toast.LENGTH_LONG
-                        ).show();
+                if (action == Action.TRANSACTION_WAITING_PASSWORD) {
+                    Toast.makeText(
+                            PosTransactionActivity.this,
+                            "Pin tries remaining to block card: ${transactionProvider?.remainingPinTries}",
+                            Toast.LENGTH_LONG
+                    ).show();
                 }
             }
         });
