@@ -7,7 +7,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 
@@ -16,10 +16,12 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url "https://packagecloud.io/stone/sdk-android/maven2" }
         maven { url "https://packagecloud.io/stone/sdk-android-snapshot/maven2" }
         maven { url "https://packagecloud.io/Stone/pos-android-service-container/maven2" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
     }
 }

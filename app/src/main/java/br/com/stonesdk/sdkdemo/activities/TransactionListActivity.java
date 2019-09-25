@@ -147,7 +147,9 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 cancellationProvider.setDialogMessage("Cancelando...");
                                 cancellationProvider.setConnectionCallback(new StoneCallbackInterface() { // chamada de retorno.
                                     public void onSuccess() {
-                                        Toast.makeText(getApplicationContext(), cancellationProvider.getMessageFromAuthorize(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),
+                                                cancellationProvider.getMessageFromAuthorize(),
+                                                Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
 
@@ -170,15 +172,22 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 provider.setConnectionCallback(new StoneCallbackInterface() {
                                     @Override
                                     public void onSuccess() {
-                                        Toast.makeText(TransactionListActivity.this, "Transação Capturada com sucesso!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TransactionListActivity.this, "Transação " +
+                                                "Capturada com sucesso!",
+                                                Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
                                     public void onError() {
-                                        Toast.makeText(TransactionListActivity.this, "Ocorreu um erro captura da transacao: " + provider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TransactionListActivity.this, "Ocorreu um " +
+                                                "erro captura da transacao: " +
+                                                provider.getListOfErrors(),
+                                                Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
+
+                                provider.execute();
                                 break;
                         }
                     }
