@@ -115,9 +115,7 @@ public abstract class BaseTransactionActivity<T extends BaseTransactionProvider>
                 transactionType = TypeOfTransactionEnum.CREDIT;
         }
 
-//        Defina o ITK da sua transação
-//        transactionObject.setInitiatorTransactionKey("SEU_IDENTIFICADOR_UNICO_AQUI");
-
+        transactionObject.setInitiatorTransactionKey(null);
         transactionObject.setTypeOfTransaction(transactionType);
         transactionObject.setCapture(captureTransactionCheckBox.isChecked());
         transactionObject.setAmount(amountEditText.getText().toString());
