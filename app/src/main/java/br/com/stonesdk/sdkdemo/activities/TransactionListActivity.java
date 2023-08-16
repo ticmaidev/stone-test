@@ -131,7 +131,7 @@ public class TransactionListActivity extends AppCompatActivity implements OnItem
                                 customPosPrintProvider.addLine("ATK : " + selectedTransaction.getAcquirerTransactionKey());
                                 customPosPrintProvider.addLine("");
                                 customPosPrintProvider.addLine("Signature");
-                                customPosPrintProvider.addBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
+//                                customPosPrintProvider.addBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
                                 customPosPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
                                     @Override
                                     public void onSuccess() {

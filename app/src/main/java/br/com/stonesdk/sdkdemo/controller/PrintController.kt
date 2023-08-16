@@ -13,12 +13,12 @@ class PrintController(private val context: Context,
     fun print() {
         provider.connectionCallback = object : StoneCallbackInterface {
             override fun onSuccess() {
-                Toast.makeText(context, "Recibo impresso", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Recibo impresso", Toast.LENGTH_SHORT).show()
             }
 
             override fun onError() {
-                Toast.makeText(context, "Erro ao imprimir: "
-                        + provider.listOfErrors, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Erro ao imprimir: "
+//                        + provider.listOfErrors, Toast.LENGTH_SHORT).show()
             }
         }
 

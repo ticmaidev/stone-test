@@ -2,6 +2,7 @@ package br.com.stonesdk.sdkdemo.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
@@ -16,9 +17,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 import br.com.stone.posandroid.providers.PosPrintProvider;
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
+import br.com.stone.posandroid.providers.PosTransactionProvider;
 import br.com.stone.posandroid.providers.PosValidateTransactionByCardProvider;
 import br.com.stonesdk.sdkdemo.R;
+import br.com.stonesdk.sdkdemo.controller.PrintController;
 import stone.application.enums.Action;
+import stone.application.enums.InstalmentTransactionEnum;
+import stone.application.enums.ReceiptType;
+import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionObject;
@@ -47,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.posValidateCardOption).setOnClickListener(this);
         findViewById(R.id.posPrinterProvider).setOnClickListener(this);
         findViewById(R.id.posMifareProvider).setOnClickListener(this);
+    }
+
+    private void printReceipt(ReceiptType receiptType, TransactionObject transactionObject) {
+        new PrintController(getApplicationContext(),
+                new PosPrintReceiptProvider(getApplicationContext(),
+                        transactionObject, receiptType)).print();
     }
 
     @Override
@@ -206,25 +219,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.posPrinterProvider:
-                final PosPrintProvider customPosPrintProvider = new PosPrintProvider(getApplicationContext());
-                customPosPrintProvider.addLine("PAN : " + "123");
-                customPosPrintProvider.addLine("DATE/TIME : 01/01/1900");
-                customPosPrintProvider.addLine("AMOUNT : 200.00");
-                customPosPrintProvider.addLine("ATK : 123456789");
-                customPosPrintProvider.addLine("Signature");
-                customPosPrintProvider.addBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.signature));
-                customPosPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
+
+                TransactionObject transaction = new TransactionObject();
+                transaction.setTypeOfTransaction(TypeOfTransactionEnum.DEBIT);
+                transaction.setInstalmentTransaction(InstalmentTransactionEnum.ONE_INSTALMENT);
+                transaction.setAmount("2000");
+                transaction.setCapture(true);
+
+                PosTransactionProvider transProvider = new PosTransactionProvider(
+                        this,
+                        transaction,
+                        Stone.getUserModel(0)
+                );
+
+                transProvider.setConnectionCallback(new StoneActionCallback() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(getApplicationContext(), "Recibo impresso", Toast.LENGTH_SHORT).show();
-                    }
+                        /*
+                        * Estou tentando imprimir a via do lojista 1.
+                        * Por algum motivo, isto desabilita o callback de sucesso de PosPrintProvider.
+                        * */
+                        printReceipt(ReceiptType.MERCHANT, transaction);
 
-                    @Override
-                    public void onError() {
-                        Toast.makeText(getApplicationContext(), "Erro ao imprimir: " + customPosPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                        final PosPrintProvider customPosPrintProvider = new PosPrintProvider(getApplicationContext());
+                        Bitmap myBitmap = BitmapFactory.decodeFile("/storage/emulated/0/" +
+                                "Android/data/br.com.stonesdk.sdkdemo/files/Documents/estrela.jpg");
+
+                        customPosPrintProvider.addLine("início");
+                        customPosPrintProvider.addBitmap(myBitmap);
+                        customPosPrintProvider.addLine("final");
+
+                        customPosPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("stone:printer:onSuccess", "onSuccess");
+//                                Toast.makeText(getApplicationContext(), "Recibo impresso", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.d("stone:printer:onError", "onError");
+//                                Toast.makeText(getApplicationContext(), "Erro ao imprimir: " + customPosPrintProvider.getListOfErrors(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        customPosPrintProvider.execute();
                     }
+                    @Override
+                    public void onStatusChanged(Action action) {}
+                    @Override
+                    public void onError() {}
                 });
-                customPosPrintProvider.execute();
+
+                transProvider.execute();
+                break;
 
             case R.id.posMifareProvider:
                 startActivity(new Intent(MainActivity.this, MifareActivity.class));
